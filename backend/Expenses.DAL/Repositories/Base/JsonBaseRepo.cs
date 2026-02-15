@@ -8,6 +8,10 @@ public abstract class JsonBaseRepo<T>
     // Ruta del archivo JSON
     protected readonly string _filePath;
 
+    // Cache para almacenar las categorias en memoria
+    // y ahorrar lecturas al disco cuando se realizan multiples operaciones seguidas
+    protected List<T>? _cache;
+
     // Opciones de serializacion JSON
     protected readonly JsonSerializerOptions _options;
 
@@ -48,6 +52,10 @@ public abstract class JsonBaseRepo<T>
     // Metodo para cargar todos los items del archivo
     public async Task<List<T>> LoadAsync()
     {
+        // Si la cache no es nula, retorna la cache para evitar leer el archivo nuevamente
+        if (_cache != null)
+            return _cache;
+
         // Asegura que el archivo exista antes de intentar cargarlo
         EnsureFile();
 
@@ -56,18 +64,23 @@ public abstract class JsonBaseRepo<T>
 
         // Si el contenido esta vacío, retorna una lista vacia
         if (string.IsNullOrWhiteSpace(json))
-            return new List<T>();
+        {
+            _cache = new List<T>();
+            return _cache;
+        }
 
         try
         {
             // Deserializamos el contenido completo a una lista de objetos T
             // Si la deserializacion falla por X o Y razon, retornamos una lista vacia
-            return JsonSerializer.Deserialize<List<T>>(json, _options) ?? new List<T>();
+            _cache = JsonSerializer.Deserialize<List<T>>(json, _options) ?? new List<T>();
+            return _cache;
         }
         catch (JsonException)
         {
             // Si el JSON se corrompio, no se puede deserializar, o algo raro idk, retornamos una lista vacia
-            return new List<T>();
+            _cache = new List<T>();
+            return _cache;
         }
     }
 
@@ -78,6 +91,8 @@ public abstract class JsonBaseRepo<T>
         string json = JsonSerializer.Serialize(items, _options);
         // Escribimos el JSON en el archivo (sobrescribiendo lo que haya)
         await File.WriteAllTextAsync(_filePath, json);
+        // Actualizamos la cache con los items guardados
+        _cache = items;
     }
 
     // Metodo para agregar un nuevo item al archivo
