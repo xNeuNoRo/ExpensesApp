@@ -23,10 +23,10 @@ public class ExpenseRepository : JsonBaseRepo<Expense>, IExpenseRepository
 
     // Actualizar un gasto existente por su Id
     public async Task UpdateAsync(Expense expense) =>
-        await UpdateAsync(e => e.Id == expense.Id, expense);
+        await base.UpdateAsync(e => e.Id == expense.Id, expense);
 
     // Eliminar un gasto por su Id
-    public async Task DeleteAsync(Guid id) => await DeleteAsync(e => e.Id == id);
+    public async Task DeleteAsync(Guid id) => await base.DeleteAsync(e => e.Id == id);
 
     // Metodo para obtener gastos filtrados por categoria y/o rango de fechas
     public async Task<IEnumerable<Expense>> GetByFilterAsync(ExpenseFilter filter)

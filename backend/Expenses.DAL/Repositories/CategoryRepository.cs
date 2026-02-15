@@ -23,10 +23,10 @@ public class CategoryRepository : JsonBaseRepo<Category>, ICategoryRepository
 
     // Actualizar una categoria existente por su Id
     public async Task UpdateAsync(Category category) =>
-        await UpdateAsync(c => c.Id == category.Id, category);
+        await base.UpdateAsync(c => c.Id == category.Id, category);
 
     // Eliminar una categoria por su Id
-    public async Task DeleteAsync(Guid id) => await DeleteAsync(c => c.Id == id);
+    public async Task DeleteAsync(Guid id) => await base.DeleteAsync(c => c.Id == id);
 
     // Metodo para verificar si existe una categoria con un nombre dado (ignorando mayusculas/minusculas)
     public async Task<bool> ExistsByNameAsync(string name)
