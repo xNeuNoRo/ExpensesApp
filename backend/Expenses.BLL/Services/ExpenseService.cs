@@ -28,10 +28,22 @@ public class ExpenseService : IExpenseService
     {
         // Obtenemos todos los gastos y categorias de la base de datos (JSON) para convertirlos a DTOs y devolverlos al cliente
         var expenses = await _expenseRepository.GetByFilterAsync(filter);
-        var categories = await _categoryRepository.GetAllAsync();
 
-        // Convertimos los gastos a DTOs utilizando el metodo de extension ToDtoList() definido en ExpenseMappingExtensions, pasando tambien las categorias para poder incluir el nombre de la categoria en el DTO
-        return expenses.ToDtoList(categories);
+        // Si no hay gastos, retornamos una lista vacia de DTOs para evitar hacer consultas innecesarias a la base de datos de categorias
+        if (!expenses.Any())
+            return Enumerable.Empty<ExpenseResponseDto>();
+
+        // Obtenemos los IDs de las categorias referenciadas por los gastos obtenidos, para luego obtener solo esas categorias de la base de datos y evitar cargar todas las categorias si no es necesario
+        var referencedCategoryIds = expenses.Select(e => e.CategoryId).Distinct().ToHashSet();
+
+        // Obtenemos todas las categorias (aunque parezca contraproducente con lo de arriba, ya tiene cache aplicado por debajo, asi que si ya se han cargado las categorias antes, esta llamada sera muy rapida y no tendra un gran impacto en el rendimiento)
+        var allCategories = await _categoryRepository.GetAllAsync();
+
+        // Filtramos las categorias para obtener solo las que son referenciadas por los gastos obtenidos, para luego pasar esa lista de categorias al metodo de extension ToDtoList() y que pueda incluir el nombre y color de la categoria en cada gasto convertido a DTO
+        var referencedCategories = allCategories.Where(c => referencedCategoryIds.Contains(c.Id));
+
+        // Convertimos los gastos a DTOs utilizando el metodo de extension ToDtoList() definido en ExpenseMappingExtensions, pasando tambien las categorias referenciadas para poder incluir el nombre de la categoria en el DTO
+        return expenses.ToDtoList(referencedCategories);
     }
 
     // Metodo para obtener un gasto por su ID, convertirlo a DTO e incluir el nombre y color de la categoria en el DTO para devolverlo al cliente
