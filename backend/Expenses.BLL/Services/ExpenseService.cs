@@ -186,37 +186,50 @@ public class ExpenseService : IExpenseService
 
         // Obtenemos los gastos del mes y año especificados utilizando el filtro creado, y todas las categorias para poder calcular las estadisticas por categoria
         var expenses = await _expenseRepository.GetByFilterAsync(filter);
-        var categories = await _categoryRepository.GetAllAsync();
+        var allCategories = await _categoryRepository.GetAllAsync();
 
         // Calculamos el total gastado sumando el monto de todos los gastos obtenidos
         decimal totalSpent = expenses.Sum(e => e.Amount);
         // y el presupuesto total sumando el presupuesto mensual de todas las categorias obtenidas
-        decimal totalBudget = categories.Sum(c => c.MonthlyBudget);
+        decimal totalBudget = allCategories.Sum(c => c.MonthlyBudget);
+
+        // Creamos un diccionario para almacenar el monto gastado en cada categoria,
+        // agrupando los gastos por su CategoryId y sumando el monto de los gastos en cada categoria
+        var spendingByCategory = expenses
+            .GroupBy(e => e.CategoryId)
+            .ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
+        // Ej: { GuidCategoria1: 150.00, GuidCategoria2: 75.50, ... }
+
+        // Creamos un diccionario de las categorias para buscarla mas en detalle despues
+        var categoryDict = allCategories.ToDictionary(c => c.Id);
 
         // Calculamos las estadisticas por categoria iterando sobre cada categoria:
-        var details = categories
-            .Select(c =>
+        var details = spendingByCategory
+            .Select(item =>
             {
-                // Para cada categoria, calculamos el monto gastado en esa categoria
-                // sumando el monto de todos los gastos que pertenecen a esa categoria
-                var spentInCategory = expenses.Where(e => e.CategoryId == c.Id).Sum(e => e.Amount);
+                // Obtenemos el ID de la categoria y el monto gastado en esa categoria del diccionario de gastos por categoria
+                var categoryId = item.Key;
+                var spentAmount = item.Value;
+
+                // Intentamos obtener la categoria correspondiente al ID utilizando el diccionario de categorias,
+                // si no se encuentra la categoria, cat sera null
+                categoryDict.TryGetValue(categoryId, out var cat);
 
                 // Calculamos el porcentaje que representa el monto gastado en esa categoria
                 // respecto al total gastado, evitando division por cero si el total gastado es cero
                 double percentage =
-                    totalSpent > 0 ? (double)spentInCategory / (double)totalSpent * 100 : 0;
+                    totalSpent > 0 ? (double)spentAmount / (double)totalSpent * 100 : 0;
 
                 // Creamos un objeto CategoryStatDto con el nombre y color de la categoria, el monto gastado en esa categoria, el presupuesto mensual de esa categoria, el porcentaje calculado y una alerta si el monto gastado en esa categoria supera su presupuesto mensual
                 return new CategoryStatDto(
-                    c.Name,
-                    c.Color,
-                    spentInCategory,
-                    c.MonthlyBudget,
+                    cat?.Name ?? "Sin Categoría",
+                    cat?.Color ?? "#000000",
+                    spentAmount,
+                    cat?.MonthlyBudget ?? 0,
                     Math.Round(percentage, 2),
-                    spentInCategory > c.MonthlyBudget // Check sencillo para devolver un booleano indicando si se ha superado el presupuesto de la categoria
+                    spentAmount > (cat?.MonthlyBudget ?? 0) // Check sencillo para devolver un booleano indicando si se ha superado el presupuesto de la categoria
                 );
             })
-            .Where(s => s.AmountSpent > 0) // Filtramos para incluir solo las categorias en las que se ha gastado algo, es decir, aquellas cuyo monto gastado es mayor a cero
             .OrderByDescending(s => s.AmountSpent) // Ordenamos las categorias por monto gastado de mayor a menor para mostrar primero las categorias en las que se ha gastado mas dinero
             .ToList(); // Convertimos el resultado a una lista
 
