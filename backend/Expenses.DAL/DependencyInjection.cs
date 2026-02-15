@@ -7,6 +7,7 @@ namespace Expenses.DAL;
 
 public static class DependencyInjection
 {
+    // Este método de extensión se encargará de registrar los servicios relacionados con la persistencia de datos
     public static IServiceCollection AddPersistenceServices(
         this IServiceCollection services,
         IConfiguration configuration
