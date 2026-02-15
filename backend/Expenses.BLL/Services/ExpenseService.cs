@@ -160,6 +160,21 @@ public class ExpenseService : IExpenseService
     // Metodo para obtener el reporte mensual de gastos, con las estadisticas por categoria, para un mes y año especificos, y devolverlo como DTO al cliente
     public async Task<MonthlyReportDto> GetMonthlyReportAsync(int month, int year)
     {
+        // Validamos que el mes y año proporcionados sean validos
+        if (month < 1 || month > 12)
+            throw AppException.BadRequest(
+                "El mes debe estar entre 1 y 12.",
+                ErrorCodes.ValidationError
+            );
+
+        // Idk, puse 3000 como limite pq no creo que esto exista en el futuro
+        // Y 1970 ya que es el año 0 en Unix
+        if (year < 1970 || year > 3000)
+            throw AppException.BadRequest(
+                "El año proporcionado no es válido.",
+                ErrorCodes.ValidationError
+            );
+
         // Creamos un filtro para obtener los gastos del mes y año especificados, estableciendo la fecha de inicio al primer dia del mes a las 00:00:00 y la fecha de fin al ultimo dia del mes a las 23:59:59, ambas en UTC para evitar problemas de zonas horarias
         var filter = new ExpenseFilter
         {
