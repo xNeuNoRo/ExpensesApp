@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Expenses.Entities.Models;
 
 public class Category
@@ -16,6 +18,7 @@ public class Category
     public Category() { }
 
     // Constructor para la BLL
+    [SetsRequiredMembers]
     public Category(string name, decimal monthlyBudget, string? icon = null, string? color = null)
     {
         Id = Guid.NewGuid();
