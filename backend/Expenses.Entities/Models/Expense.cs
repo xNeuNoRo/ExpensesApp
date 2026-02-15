@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Expenses.Entities.Models;
 
 public class Expense
@@ -15,12 +17,20 @@ public class Expense
     public Expense() { }
 
     // Constructor para la BLL
-    public Expense(string description, decimal amount, Guid categoryId, DateTime? date = null)
+    [SetsRequiredMembers]
+    public Expense(
+        string name,
+        string description,
+        decimal amount,
+        Guid categoryId,
+        DateTime? date = null
+    )
     {
         Id = Guid.NewGuid();
+        Name = name;
         Description = description;
         Amount = amount;
         CategoryId = categoryId;
-        Date = date ?? DateTime.Now;
+        Date = date ?? DateTime.UtcNow;
     }
 }
