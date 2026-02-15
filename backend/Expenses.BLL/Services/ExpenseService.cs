@@ -152,15 +152,9 @@ public class ExpenseService : IExpenseService
         var filter = new ExpenseFilter
         {
             StartDate = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc),
-            EndDate = new DateTime(
-                year,
-                month,
-                DateTime.DaysInMonth(year, month),
-                23,
-                59,
-                59,
-                DateTimeKind.Utc
-            ),
+            EndDate = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc)
+                .AddMonths(1)
+                .AddTicks(-1), // Esto establece la fecha de fin al ultimo dia del mes a las 23:59:59.9999999, es decir, un tick antes de que comience el siguiente mes
         };
 
         // Obtenemos los gastos del mes y año especificados utilizando el filtro creado, y todas las categorias para poder calcular las estadisticas por categoria
@@ -183,7 +177,7 @@ public class ExpenseService : IExpenseService
                 // Calculamos el porcentaje que representa el monto gastado en esa categoria
                 // respecto al total gastado, evitando division por cero si el total gastado es cero
                 double percentage =
-                    totalSpent > 0 ? (double)(spentInCategory / totalSpent * 100) : 0;
+                    totalSpent > 0 ? (double)spentInCategory / (double)totalSpent * 100 : 0;
 
                 // Creamos un objeto CategoryStatDto con el nombre y color de la categoria, el monto gastado en esa categoria, el presupuesto mensual de esa categoria, el porcentaje calculado y una alerta si el monto gastado en esa categoria supera su presupuesto mensual
                 return new CategoryStatDto(

@@ -30,11 +30,15 @@ public static class ExpenseMappingExtensions
         IEnumerable<Category> categories
     )
     {
+        // Creamos un diccionario de las categorias
+        // Es mejor ya que la complejidad es O(n) para buscar una categoria por su ID, en lugar de O(n^2) si tuvieramos que buscar la categoria correspondiente a cada gasto utilizando FirstOrDefault en la lista de categorias
+        var categoryDict = categories.ToDictionary(c => c.Id);
+
         return expenses.Select(e =>
         {
-            // Buscamos la categoria correspondiente al gasto actual para obtener su nombre y color,
-            // si no se encuentra la categoria se asignan valores por defecto
-            var category = categories.FirstOrDefault(c => c.Id == e.CategoryId);
+            // Intentamos obtener la categoria correspondiente al gasto utilizando el diccionario de categorias,
+            // si no se encuentra la categoria, category sera null
+            categoryDict.TryGetValue(e.CategoryId, out var category);
 
             // Utilizamos el metodo ToDto de Expense para convertir el gasto a un DTO,
             // pasando el nombre y color de la categoria (o valores por defecto si no se encuentra la categoria)

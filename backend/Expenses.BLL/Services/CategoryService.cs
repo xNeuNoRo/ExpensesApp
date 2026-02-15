@@ -137,6 +137,6 @@ public class CategoryService : ICategoryService
     public async Task<bool> CategoryExistsByNameAsync(string name)
     {
         // Simplemente delegamos la validacion al repositorio para no incumplir el llamado de la capa de presentacion a la capa de datos, y asi mantener la separacion de responsabilidades entre capas
-        return await _categoryRepository.ExistsByNameAsync(name);
+        return await _categoryRepository.ExistsByNameAsync(name.Trim());
     }
 }

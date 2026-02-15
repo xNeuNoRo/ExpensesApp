@@ -31,6 +31,6 @@ public class Expense
         Description = description;
         Amount = amount;
         CategoryId = categoryId;
-        Date = date ?? DateTime.Now;
+        Date = date ?? DateTime.UtcNow;
     }
 }
