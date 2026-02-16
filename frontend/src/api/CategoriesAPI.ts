@@ -11,7 +11,6 @@ import {
   UpdateCategoryFormData,
   ValidateCategorySchema,
 } from "@/schemas/category";
-import { isAxiosError } from "axios";
 
 export type CategoriesAPIType = {
   UpdateCategoryFormData: UpdateCategoryFormData & { id: Category["id"] };
