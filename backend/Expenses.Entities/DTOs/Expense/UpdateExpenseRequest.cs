@@ -8,6 +8,13 @@ public record UpdateExpenseRequest(
     [Required(ErrorMessage = "El monto es obligatorio.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser un valor positivo.")]
         decimal Amount,
-    [Required] DateTime Date,
-    [Required] Guid CategoryId
+    [Required(ErrorMessage = "La fecha es obligatoria.")]
+    [Range(
+        typeof(DateTime), // Especificamos que el rango es para un tipo DateTime
+        "1970-01-01",
+        "3000-12-31",
+        ErrorMessage = "La fecha debe ser válida (año 1970 <= fecha <= año 3000)."
+    )]
+        DateTime Date,
+    [Required(ErrorMessage = "La categoría es obligatoria.")] Guid? CategoryId
 );
