@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+@theme {
+  /* Colores de Marca y Fondos */
+  --color-primary: #0ea5e9;
+  --color-secondary: #6366f1;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+
+  /* Colores de Estado */
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+
+  /* Colores de Texto y Bordes */
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+
+  /* Colores para Categorías */
+  --color-cat-food: #f97316; /* Naranja */
+  --color-cat-health: #ec4899; /* Rosa */
+  --color-cat-leisure: #8b5cf6; /* Violeta */
+  --color-cat-saving: #22c55e; /* Verde */
+  --color-cat-housing: #3b82f6; /* Azul */
+  --color-cat-subscriptions: #06b6d4; /* Cian */
+
+  /** Tipografías **/
+
+  /* Texto general */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Titulos */
+  --font-display: "Space Grotesk", var(--font-sans);
+
+  /* Datos tecnicos */
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  :root {
+    /* Mapeo de colores para uso fuera de Tailwind */
+    --primary: var(--color-primary);
+    --secondary: var(--color-secondary);
+    --background: var(--color-background);
+    --surface: var(--color-surface);
+    --success: var(--color-success);
+    --danger: var(--color-danger);
+    --warning: var(--color-warning);
+
+    /* Configuración por defecto de la página */
+    background-color: var(--color-background);
+    color: var(--color-text-main);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Estilos específicos para títulos usando la fuente Display */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-text-main);
+  }
+
+  /* Estilos para textos secundarios */
+  p,
+  span,
+  label {
+    color: var(--color-text-main);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+}
