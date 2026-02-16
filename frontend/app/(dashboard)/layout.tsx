@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { openSidebar } = useUi();
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-background">
       {/* Header móvil consume la acción de abrir el sidebar */}
       <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-background px-4 sm:hidden">
         <div className="flex items-center gap-3">

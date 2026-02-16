@@ -13,7 +13,7 @@ export default function DashboardSummaryCards() {
     return <div className="h-32 animate-pulse rounded-xl bg-surface" />;
 
   return (
-    <div className="grid gap-6 md:grid-cols-3">
+    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       {/* Card 1: Gasto Total */}
       <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
         <div className="flex items-center justify-between">
