@@ -57,4 +57,18 @@ public class CategoriesController : BaseApiController
         // Devolvemos un objeto anonimo con la propiedad "available", que indica si el nombre de la categoria esta disponible o no
         return Success(new { available = !nameExists });
     }
+
+    [HttpGet("name/{name}")]
+    public async Task<IActionResult> GetByName(string name)
+    {
+        var category = await _categoryService.GetCategoryByNameAsync(name);
+        return Success(category);
+    }
+
+    [HttpGet("lookup")]
+    public async Task<IActionResult> GetLookup()
+    {
+        // Delegamos al servicio la logica de obtener el lookup de categorias
+        return Success(await _categoryService.GetCategoryLookupAsync());
+    }
 }

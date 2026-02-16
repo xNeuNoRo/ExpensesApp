@@ -10,6 +10,7 @@ public class CategoryService : ICategoryService
 {
     private readonly IExpenseRepository _expenseRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly string _categoryNotFoundMessage = "No se encontro la categoria especificada.";
 
     // Constructor para inyectar el repo de categorias
     public CategoryService(
@@ -30,6 +31,14 @@ public class CategoryService : ICategoryService
         return categories.ToDtoList();
     }
 
+    // Metodo adicional para obtener un listado de categorias pero con un DTO mas ligero (CategoryLookupResponseDto)
+    // Solo contendra el Id y el Nombre de la categoria, para casos donde no se necesite toda la informacion de la categoria
+    public async Task<IEnumerable<CategoryLookupResponseDto>> GetCategoryLookupAsync()
+    {
+        var categories = await _categoryRepository.GetAllAsync();
+        return categories.ToLookupDtoList();
+    }
+
     // Obtenemos una categoria por su ID de la base de datos y la convertimos a DTO para devolverla al cliente
     public async Task<CategoryResponseDto> GetCategoryByIdAsync(Guid id)
     {
@@ -39,10 +48,23 @@ public class CategoryService : ICategoryService
         // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
         if (category == null)
         {
-            throw AppException.NotFound(
-                "No se encontro la categoria especificada.",
-                ErrorCodes.CategoryNotFound
-            );
+            throw AppException.NotFound(_categoryNotFoundMessage, ErrorCodes.CategoryNotFound);
+        }
+
+        // Convertimos la categoria a DTO utilizando el metodo de extension ToDto() definido en CategoryMappingExtensions
+        return category.ToDto();
+    }
+
+    // Metodo adicional para obtener una categoria por su nombre
+    public async Task<CategoryResponseDto> GetCategoryByNameAsync(string name)
+    {
+        // Obtenemos la categoria por su nombre de la base de datos (JSON)
+        var category = await _categoryRepository.GetByNameAsync(name);
+
+        // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
+        if (category == null)
+        {
+            throw AppException.NotFound(_categoryNotFoundMessage, ErrorCodes.CategoryNotFound);
         }
 
         // Convertimos la categoria a DTO utilizando el metodo de extension ToDto() definido en CategoryMappingExtensions
@@ -80,10 +102,7 @@ public class CategoryService : ICategoryService
         // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
         if (category == null)
         {
-            throw AppException.NotFound(
-                "No se encontro la categoria especificada.",
-                ErrorCodes.CategoryNotFound
-            );
+            throw AppException.NotFound(_categoryNotFoundMessage, ErrorCodes.CategoryNotFound);
         }
 
         // Validamos que no exista otra categoria con el mismo nombre antes de actualizarla, ignorando la categoria actual
@@ -114,10 +133,7 @@ public class CategoryService : ICategoryService
         // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
         if (category == null)
         {
-            throw AppException.NotFound(
-                "No se encontro la categoria especificada.",
-                ErrorCodes.CategoryNotFound
-            );
+            throw AppException.NotFound(_categoryNotFoundMessage, ErrorCodes.CategoryNotFound);
         }
 
         // Validamos que no existan gastos asociados a la categoria antes de eliminarla
