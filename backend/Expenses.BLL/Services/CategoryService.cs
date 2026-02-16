@@ -106,15 +106,16 @@ public class CategoryService : ICategoryService
         }
 
         // Validamos que no exista otra categoria con el mismo nombre antes de actualizarla, ignorando la categoria actual
-        if (
-            !category.Name.Equals(request.Name, StringComparison.OrdinalIgnoreCase)
-            && await _categoryRepository.ExistsByNameAsync(request.Name)
-        )
+        if (!category.Name.Equals(request.Name, StringComparison.OrdinalIgnoreCase))
         {
-            throw AppException.Conflict(
-                "Ya existe una categoria con el mismo nombre.",
-                ErrorCodes.DuplicateCategory
-            );
+            var exists = await _categoryRepository.ExistsByNameAsync(request.Name);
+            if (exists)
+            {
+                throw AppException.Conflict(
+                    $"Ya existe una categoria con el mismo nombre '{request.Name}'.",
+                    ErrorCodes.DuplicateCategory
+                );
+            }
         }
 
         // Actualizamos la categoria con los datos del DTO utilizando el metodo de extension UpdateFromRequest() definido en CategoryMappingExtensions
