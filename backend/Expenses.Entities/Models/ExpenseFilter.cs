@@ -33,12 +33,12 @@ public class ExpenseFilter : IValidatableObject // Implementamos la interfaz IVa
             );
         }
 
-        // Validamos que la fecha de inicio no sea una fecha muy antigua, por ejemplo anterior al año 2000,
+        // Validamos que la fecha de inicio no sea una fecha muy antigua, por ejemplo anterior al año 1900,
         // ya que no tendría sentido filtrar por una fecha tan antigua y podría indicar un error
-        if (StartDate.HasValue && StartDate.Value.Year < 2000)
+        if (StartDate.HasValue && StartDate.Value.Year < 1970)
         {
             yield return new ValidationResult(
-                "La fecha de inicio debe ser posterior al año 2000.",
+                "La fecha de inicio debe ser posterior al año 1970.",
                 [nameof(StartDate)] // Indica que el error está en el campo 'StartDate'
             );
         }
