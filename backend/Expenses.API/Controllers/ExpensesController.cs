@@ -47,12 +47,12 @@ public class ExpensesController : BaseApiController
     }
 
     // Este endpoint es para obtener un gasto por su ID.
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id) =>
         Success(await _expenseService.GetExpenseByIdAsync(id)); // Devolvemos el gasto encontrado utilizando el método Success heredado de BaseApiController.
 
     // Este endpoint es para obtener un reporte mensual de gastos, agrupados por categoria, para un mes y año específicos.
-    [HttpGet("report/{year:int}/{month:int}")]
+    [HttpGet("report/{year}/{month}")]
     public async Task<IActionResult> GetMonthlyReport(int year, int month)
     {
         // Obtenemos el reporte mensual utilizando el servicio de gastos.
@@ -75,7 +75,7 @@ public class ExpensesController : BaseApiController
     }
 
     // Este endpoint es para actualizar un gasto existente por su ID.
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, UpdateExpenseRequest request)
     {
         // Actualizamos el gasto utilizando el servicio de gastos.
@@ -84,7 +84,7 @@ public class ExpensesController : BaseApiController
     }
 
     // Este endpoint es para eliminar un gasto por su ID.
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         // Eliminamos el gasto utilizando el servicio de gastos.
@@ -93,7 +93,7 @@ public class ExpensesController : BaseApiController
     }
 
     // Este endpoint es para exportar el reporte mensual de gastos a un archivo JSON, para un mes y año específicos.
-    [HttpPost("report/{year:int}/{month:int}/export")]
+    [HttpPost("report/{year}/{month}/export")]
     public async Task<IActionResult> ExportReport(int year, int month)
     {
         // El servicio genera el archivo y nos devuelve el nombre

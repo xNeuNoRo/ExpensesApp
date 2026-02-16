@@ -21,7 +21,7 @@ public class CategoriesController : BaseApiController
         Success(await _categoryService.GetCategoriesAsync()); // Devolvemos la lista de categorias utilizando el método Success heredado de BaseApiController.
 
     // Este endpoint es para obtener una categoria por su ID.
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id) =>
         Success(await _categoryService.GetCategoryByIdAsync(id)); // Devolvemos la categoria encontrada utilizando el método Success heredado de BaseApiController.
 
@@ -40,7 +40,7 @@ public class CategoriesController : BaseApiController
     }
 
     // Este endpoint es para actualizar una categoria existente, identificada por su ID.
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, UpdateCategoryRequest request)
     {
         // Delegamos al servicio la logica de actualizar una categoria
@@ -50,7 +50,7 @@ public class CategoriesController : BaseApiController
     }
 
     // Este endpoint es para eliminar una categoria por su ID.
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         // Delegamos al servicio la logica de eliminar una categoria

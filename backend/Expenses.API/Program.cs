@@ -40,7 +40,40 @@ builder.Services.AddCors(options =>
 // Configuramos la respuesta de error personalizada para los casos en que el modelo de datos no sea válido
 // (por ejemplo, si faltan campos requeridos o si los datos no cumplen con las validaciones definidas en los DTOs)
 builder
-    .Services.AddControllers()
+    .Services.AddControllers(options =>
+    {
+        // Personalizamos los mensajes de error de validación para que sean más claros y específicos, en lugar de los mensajes genéricos que ASP.NET Core proporciona por defecto.
+
+        // Error cuando el valor proporcionado no es valido para el campo especifico
+        options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor(
+            (value, field) => $"El valor '{value}' no es válido para el campo '{field}'."
+        );
+
+        // Error cuando el valor proporcionado no es valido para un campo que no se pudo identificar
+        options.ModelBindingMessageProvider.SetNonPropertyAttemptedValueIsInvalidAccessor(
+            (value) => $"El valor '{value}' no es válido."
+        );
+
+        // Error cuando el valor proporcionado es null para un campo que no se pudo identificar
+        options.ModelBindingMessageProvider.SetValueIsInvalidAccessor(
+            (value) => $"El valor '{value}' es inválido."
+        );
+
+        // Error cuando se esperaba un valor pero no se proporcionó ninguno
+        options.ModelBindingMessageProvider.SetMissingRequestBodyRequiredValueAccessor(() =>
+            "Se requiere un cuerpo de petición no vacío."
+        );
+
+        // Error cuando falta un valor para un campo específico que es requerido
+        options.ModelBindingMessageProvider.SetMissingBindRequiredValueAccessor(
+            (field) => $"Falta un valor para el campo '{field}'."
+        );
+
+        // Error cuando se esperaba un número pero se proporcionó un valor que no es un número
+        options.ModelBindingMessageProvider.SetNonPropertyValueMustBeANumberAccessor(() =>
+            "El campo debe ser un número."
+        );
+    })
     .ConfigureApiBehaviorOptions(options =>
     {
         // Sobrescribimos la fábrica de respuestas para modelos no válidos,
