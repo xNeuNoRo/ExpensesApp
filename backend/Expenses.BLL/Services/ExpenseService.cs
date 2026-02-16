@@ -193,8 +193,10 @@ public class ExpenseService : IExpenseService
 
         // Calculamos el total gastado sumando el monto de todos los gastos obtenidos
         decimal totalSpent = expenses.Sum(e => e.Amount);
-        // y el presupuesto total sumando el presupuesto mensual de todas las categorias obtenidas
+        // El presupuesto total sumando el presupuesto mensual de todas las categorias obtenidas
         decimal totalBudget = allCategories.Sum(c => c.MonthlyBudget);
+        // El gasto promedio dividiendo el total gastado entre la cantidad de gastos obtenidos, evitando division por cero si no hay gastos
+        decimal averageSpend = expenses.Any() ? totalSpent / expenses.Count() : 0;
 
         // Creamos un diccionario para almacenar el monto gastado en cada categoria,
         // agrupando los gastos por su CategoryId y sumando el monto de los gastos en cada categoria
@@ -237,7 +239,14 @@ public class ExpenseService : IExpenseService
             .ToList(); // Convertimos el resultado a una lista
 
         // Creamos y devolvemos un objeto MonthlyReportDto con el mes, año, total gastado, presupuesto total y las estadisticas por categoria calculadas
-        return new MonthlyReportDto(month, year, totalSpent, totalBudget, details);
+        return new MonthlyReportDto(
+            month,
+            year,
+            totalSpent,
+            totalBudget,
+            Math.Round(averageSpend, 2),
+            details
+        );
     }
 
     // Metodo para exportar el reporte mensual de gastos a un archivo JSON utilizando el ReportRepository
