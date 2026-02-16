@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Expenses.API.Controllers.Base;
 using Expenses.BLL.Contracts;
 using Expenses.Entities.DTOs.Category;
@@ -60,7 +61,9 @@ public class CategoriesController : BaseApiController
 
     // Este endpoint es para validar si un nombre de categoria ya existe, para evitar duplicados.
     [HttpGet("validate-name")]
-    public async Task<IActionResult> ValidateName([FromQuery] string name)
+    public async Task<IActionResult> ValidateName(
+        [FromQuery, Required(ErrorMessage = "El nombre es obligatorio.")] string name
+    )
     {
         // Delegamos al servicio la logica de validar si el nombre de la categoria ya existe
         // El resultado es un booleano que indica si el nombre ya existe o no
@@ -71,8 +74,10 @@ public class CategoriesController : BaseApiController
     }
 
     // Este endpoint es para obtener una categoria por su nombre
-    [HttpGet("name/{name}")]
-    public async Task<IActionResult> GetByName(string name)
+    [HttpGet("search")]
+    public async Task<IActionResult> GetByName(
+        [FromQuery, Required(ErrorMessage = "El nombre es obligatorio.")] string name
+    )
     {
         var category = await _categoryService.GetCategoryByNameAsync(name);
         return Success(category);

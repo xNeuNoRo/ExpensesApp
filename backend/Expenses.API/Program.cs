@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Registramos los servicios necesarios para el funcionamiento de la aplicación, como controladores y OpenAPI (Swagger) para documentación de la API
-builder.Services.AddControllers();
+// Registramos el servicio de OpenAPI (Swagger) para documentación de la API
 builder.Services.AddOpenApi();
 
 // Inyectamos las capas personalizadas que hemos creado previamente
@@ -94,6 +93,9 @@ if (app.Environment.IsDevelopment())
 
 // Redirigimos todas las solicitudes HTTP a HTTPS para mayor seguridad
 app.UseHttpsRedirection();
+
+// Habilitamos CORS con la politica "DefaultPolicy" que definimos anteriormente, para permitir solicitudes desde el frontend
+app.UseCors("DefaultPolicy");
 
 // Habilitamos la autorización, aunque en este punto no hemos configurado nada relacionado a la autorización, es una buena práctica tenerlo en el pipeline (por si acaso) por si se necesita en el futuro
 app.UseAuthorization();
