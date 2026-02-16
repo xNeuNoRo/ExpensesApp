@@ -1,3 +1,6 @@
 # Ignorar los archivos de compilacion y objetos generados por el compilador de C#
 **/obj/
 **/bin/
+
+# Ignorar la carpeta de datos locales
+Data
