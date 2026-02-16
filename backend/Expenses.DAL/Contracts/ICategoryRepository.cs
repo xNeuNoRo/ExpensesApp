@@ -7,6 +7,7 @@ public interface ICategoryRepository
     // Operaciones CRUD para la entidad Category
     Task<IEnumerable<Category>> GetAllAsync(); // IEnumerable para retornar una lista de solo lectura
     Task<Category?> GetByIdAsync(Guid id);
+    Task<Category?> GetByNameAsync(string name);
     Task AddAsync(Category category);
     Task UpdateAsync(Category category);
     Task DeleteAsync(Guid id);

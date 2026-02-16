@@ -18,10 +18,25 @@ public static class CategoryMappingExtensions
         );
     }
 
+    // Este metodo se utilizara para convertir una entidad Category a un DTO mas ligero (CategoryLookupResponseDto)
+    // Con solamente su Id y Nombre, para casos donde no se necesite toda la informacion de la categoria
+    public static CategoryLookupResponseDto ToLookupDto(this Category category)
+    {
+        return new CategoryLookupResponseDto(category.Id, category.Name);
+    }
+
     // Este metodo se utilizara para convertir una lista de entidades Category a una lista de DTOs CategoryResponseDto
     public static IEnumerable<CategoryResponseDto> ToDtoList(this IEnumerable<Category> categories)
     {
         return categories.Select(c => c.ToDto());
+    }
+
+    // Este metodo se utilizara para convertir una lista de entidades Category a una lista de DTOs CategoryLookupResponseDto
+    public static IEnumerable<CategoryLookupResponseDto> ToLookupDtoList(
+        this IEnumerable<Category> categories
+    )
+    {
+        return categories.Select(c => c.ToLookupDto());
     }
 
     // Este metodo se utilizara para crear una nueva categoria a partir de los datos del CreateCategoryRequest

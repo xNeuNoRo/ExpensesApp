@@ -5,5 +5,6 @@ public record MonthlyReportDto(
     int Year,
     decimal TotalSpent,
     decimal TotalBudget,
+    decimal AverageSpend,
     List<CategoryStatDto> Details
 );

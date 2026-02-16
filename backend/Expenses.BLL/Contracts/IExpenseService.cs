@@ -13,4 +13,5 @@ public interface IExpenseService
     Task DeleteExpenseAsync(Guid id);
     Task<bool> HasExpensesInCategoryAsync(Guid categoryId);
     Task<MonthlyReportDto> GetMonthlyReportAsync(int month, int year);
+    Task<string> ExportMonthlyReportAsync(int month, int year);
 }
