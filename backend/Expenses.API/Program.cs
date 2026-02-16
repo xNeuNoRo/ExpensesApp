@@ -12,6 +12,30 @@ builder.Services.AddOpenApi();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddBusinessServices();
 
+// Configuramos CORS para permitir solicitudes desde el frontend
+// Usando los origenes permitidos definidos en el archivo de appsettings
+// En caso de que no se encuentre se permite solo desde localhost:3000 (que es donde corre el frontend de next.js)
+var allowedOrigins =
+    builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? ["http://localhost:3000"];
+
+// Le decimos a CORS que permita solicitudes desde los origenes definidos
+builder.Services.AddCors(options =>
+{
+    // Definimos una politica de CORS llamada "DefaultPolicy"
+    options.AddPolicy(
+        "DefaultPolicy",
+        policy =>
+        {
+            // Configuramos la politica para permitir solicitudes desde los origenes definidos
+            policy
+                .WithOrigins(allowedOrigins)
+                .AllowAnyHeader() // Permite cualquier header en las solicitudes CORS
+                .AllowAnyMethod() // Permite cualquier metodo HTTP (GET, POST, PUT, DELETE, etc.) en las solicitudes CORS
+                .AllowCredentials(); // Permite el uso de cookies y otras credenciales en las solicitudes CORS
+        }
+    );
+});
+
 // Construimos la aplicación a partir de la configuración y servicios registrados
 var app = builder.Build();
 
