@@ -9,8 +9,9 @@ import DashboardSummaryCards from "@/components/dashboard/DashboardSummaryCards"
 import DashboardRecentExpenses from "@/components/dashboard/DashboardRecentExpenses";
 import { IoAddCircle } from "react-icons/io5";
 import Link from "next/link";
-import CreateExpenseModal from "@/components/dashboard/modals/CreateExpenseModal";
-import EditExpenseModal from "@/components/dashboard/modals/EditExpenseModal";
+import CreateExpenseModal from "@/components/expenses/modals/CreateExpenseModal";
+import EditExpenseModal from "@/components/expenses/modals/EditExpenseModal";
+import DeleteExpenseModal from "@/components/expenses/modals/DeleteExpenseModal";
 
 // Este componente es de SERVIDOR. Aquí hacemos el Prefetching.
 // Asi el cliente recibe el estado ya cargado y no tiene que esperar
@@ -67,6 +68,7 @@ export default async function DashboardPage() {
 
         <CreateExpenseModal />
         <EditExpenseModal />
+        <DeleteExpenseModal />
       </div>
     </HydrationBoundary>
   );
