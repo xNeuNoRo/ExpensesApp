@@ -2,6 +2,8 @@
 
 import { formatCurrency, formatDate } from "@/helpers/formatters";
 import { useExpenses } from "@/hooks/expenses/useQueries";
+import Link from "next/link";
+import { IoPencil, IoTrash } from "react-icons/io5";
 
 export default function DashboardRecentExpenses() {
   const { data: expenses, isLoading } = useExpenses({});
@@ -31,12 +33,15 @@ export default function DashboardRecentExpenses() {
               <th scope="col" className="px-6 py-3 text-right">
                 Monto
               </th>
+              <th scope="col" className="px-6 py-3 text-center">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
             {expenses?.length === 0 ? (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-muted">
+                <td colSpan={5} className="p-6 text-center text-muted">
                   No hay gastos registrados aún.
                 </td>
               </tr>
@@ -65,6 +70,24 @@ export default function DashboardRecentExpenses() {
                     </td>
                     <td className="px-6 py-4 text-right font-medium text-main">
                       {formatCurrency(expense.amount)}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <Link
+                        href={`/?action=edit-expense&expenseId=${expense.id}`}
+                        scroll={false}
+                        className="inline-flex items-center justify-center rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-primary"
+                        title="Editar gasto"
+                      >
+                        <IoPencil className="h-5 w-5" />
+                      </Link>
+                      <Link
+                        href={`/?action=delete-expense&expenseId=${expense.id}`}
+                        scroll={false}
+                        className="p-2 text-muted hover:text-danger transition-colors"
+                        title="Eliminar"
+                      >
+                        <IoTrash className="h-5 w-5" />
+                      </Link>
                     </td>
                   </tr>
                 ),
