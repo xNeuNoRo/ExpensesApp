@@ -11,6 +11,16 @@ export const ExpenseSchema = z.object({
   categoryName: z.string().optional(),
 });
 
+// Esquema para un array de gastos
+export const ExpensesSchema = z.array(ExpenseSchema);
+
+// Esquema para el resumen de gastos
+export const ExpenseSummarySchema = z.object({
+  total: z.number(), // Monto total de los gastos
+  count: z.number(), // Cantidad total de gastos
+  average: z.number(), // Monto promedio por gasto
+});
+
 // Esquema para crear un gasto
 export const CreateExpenseSchema = z.object({
   name: z
@@ -53,10 +63,19 @@ export const MonthlyReportSchema = z.object({
   details: z.array(CategoryStatSchema),
 });
 
+// Esquema para la respuesta de exportar reporte mensual
+export const ExportMonthlyReportResponseSchema = z.object({
+  fileName: z.string(),
+});
+
 // Tipos TypeScript inferidos a partir de los esquemas Zod
 export type Expense = z.infer<typeof ExpenseSchema>;
+export type ExpenseSummary = z.infer<typeof ExpenseSummarySchema>;
 export type CreateExpenseFormData = z.infer<typeof CreateExpenseSchema>;
 export type UpdateExpenseFormData = z.infer<typeof UpdateExpenseSchema>;
 export type ExpenseFilter = z.infer<typeof ExpenseFilterSchema>;
+export type ExportMonthlyReportResponse = z.infer<
+  typeof ExportMonthlyReportResponseSchema
+>;
 export type CategoryStat = z.infer<typeof CategoryStatSchema>;
 export type MonthlyReport = z.infer<typeof MonthlyReportSchema>;

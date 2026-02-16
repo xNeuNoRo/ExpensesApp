@@ -1,3 +1,4 @@
+import { handleApiError } from "@/helpers/handleApiError";
 import { validateApiRes } from "@/helpers/validateApiRes";
 import { api } from "@/lib/axios";
 import {
@@ -30,11 +31,7 @@ export async function createCategory(
     // Validamos la respuesta de la API usando el esquema de categoría
     return validateApiRes(data, CategorySchema);
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }
 
@@ -51,11 +48,7 @@ export async function getCategories(): Promise<Category[]> {
     // Si la validación es exitosa, retornamos las categorías
     return categories;
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }
 
@@ -72,11 +65,7 @@ export async function lookupCategories(): Promise<CategoryLookup[]> {
     // Si la validación es exitosa, retornamos el lookup de categorías
     return categories;
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }
 
@@ -92,11 +81,7 @@ export async function getCategoryById(id: Category["id"]): Promise<Category> {
     // Validamos la respuesta de la API usando el esquema de categoría
     return validateApiRes(data, CategorySchema);
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }
 
@@ -114,11 +99,7 @@ export async function getCategoryByName(
     // Validamos la respuesta de la API usando el esquema de categoría
     return validateApiRes(data, CategorySchema);
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }
 
@@ -134,11 +115,7 @@ export async function updateCategory(
     // Hacemos la petición a la API para actualizar la categoría con los datos proporcionados
     await api.put(`/categories/${categoryData.id}`, categoryData);
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }
 
@@ -152,11 +129,7 @@ export async function deleteCategory(id: Category["id"]): Promise<void> {
     // Hacemos la petición a la API para eliminar la categoría con el ID proporcionado
     await api.delete(`/categories/${id}`);
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }
 
@@ -176,10 +149,6 @@ export async function validateCategoryName(
     // Si la validación es exitosa, retornamos el resultado de la validación
     return validationResult.available;
   } catch (err) {
-    // Si ocurre un error, verificamos si es un error de Axios con respuesta del servidor
-    if (isAxiosError(err) && err.response) {
-      // Si la API respondió con un error, lanzamos el mensaje de error específico
-      throw new Error(err.response.data.error.message);
-    } else throw err; // Si es otro tipo de error (como un error de red), lo lanzamos para que sea manejado por el componente
+    handleApiError(err);
   }
 }

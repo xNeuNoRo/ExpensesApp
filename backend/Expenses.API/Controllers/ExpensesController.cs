@@ -38,12 +38,21 @@ public class ExpensesController : BaseApiController
     {
         // Obtenemos los gastos
         var expenses = await _expenseService.GetExpensesAsync(filter);
-        // Calculamos el total y el conteo de gastos
+
+        // Calculamos el total, el conteo de gastos y el promedio
         var total = expenses.Sum(e => e.Amount);
         var count = expenses.Count();
+        var average = count > 0 ? total / count : 0; // Calculamos el promedio, evitando división por cero
 
         // Devolvemos el resumen con total y conteo
-        return Success(new { total, count });
+        return Success(
+            new
+            {
+                total,
+                count,
+                average,
+            }
+        );
     }
 
     // Este endpoint es para obtener un gasto por su ID.
