@@ -112,7 +112,7 @@ public class CategoryService : ICategoryService
             if (exists)
             {
                 throw AppException.Conflict(
-                    $"Ya existe una categoria con el mismo nombre '{request.Name}'.",
+                    $"Ya existe una categoria con el mismo nombre.",
                     ErrorCodes.DuplicateCategory
                 );
             }
