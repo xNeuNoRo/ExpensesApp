@@ -19,8 +19,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`bg-gray-100 ${inter.variable}`}>
+    // suppressHydrationWarning se usa para evitar warnings de React sobre diferencias entre el HTML renderizado en el servidor y el cliente, útil cuando usamos next-themes que manipula clases en el HTML para el modo oscuro.
+    <html lang="es" suppressHydrationWarning>
+      <body className={`${inter.variable}`}>
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
