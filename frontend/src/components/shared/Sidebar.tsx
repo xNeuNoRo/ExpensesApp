@@ -10,11 +10,13 @@ import {
   IoPieChart,
   IoCodeSlash,
   IoClose,
+  IoGrid,
 } from "react-icons/io5";
 
 const navItems = [
   { name: "Dashboard", href: "/", icon: IoHome },
   { name: "Mis Gastos", href: "/expenses", icon: IoWallet },
+  { name: "Categorías", href: "/categories", icon: IoGrid },
   { name: "Reportes", href: "/reports", icon: IoPieChart },
 ];
 

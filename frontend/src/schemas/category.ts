@@ -23,7 +23,10 @@ export const CategoriesLookupSchema = z.array(CategoryLookupSchema);
 
 // Esquema para crear una nueva categoría de gastos
 export const CreateCategorySchema = z.object({
-  name: z.string().min(1, "El nombre de la categoría es obligatorio."),
+  name: z
+    .string()
+    .min(1, "El nombre de la categoría es obligatorio.")
+    .max(50, "El nombre de la categoría no puede exceder los 50 caracteres."),
   monthlyBudget: z
     .number()
     .positive("El presupuesto debe ser un valor positivo."),
