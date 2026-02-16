@@ -16,11 +16,13 @@ public static class DependencyInjection
         // Leemos las rutas de los archivos desde la config
         var categoriesPath = configuration["FileStorage:CategoriesFile"] ?? "Data/categories.json";
         var expensesPath = configuration["FileStorage:ExpensesFile"] ?? "Data/expenses.json";
+        var reportsPath = configuration["FileStorage:ReportsDirectory"] ?? "Data/Reports";
 
         // Registramos los repositorios como servicios singleton
         // Y pasamos la ruta del archivo directo al constructor
         services.AddSingleton<ICategoryRepository>(sp => new CategoryRepository(categoriesPath));
         services.AddSingleton<IExpenseRepository>(sp => new ExpenseRepository(expensesPath));
+        services.AddSingleton<IReportRepository>(sp => new ReportRepository(reportsPath));
 
         // Si en el futuro se cambia a una base de datos, solo tendria que cambiar esta parte
         // sin afectar al resto de la aplicacion, gracias a la inyeccion de dependencias y a las interfaces.

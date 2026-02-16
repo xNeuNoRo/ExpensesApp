@@ -91,4 +91,15 @@ public class ExpensesController : BaseApiController
         await _expenseService.DeleteExpenseAsync(id);
         return NoContent(); // 204 No Content
     }
+
+    // Este endpoint es para exportar el reporte mensual de gastos a un archivo JSON, para un mes y año específicos.
+    [HttpPost("report/{year:int}/{month:int}/export")]
+    public async Task<IActionResult> ExportReport(int year, int month)
+    {
+        // El servicio genera el archivo y nos devuelve el nombre
+        var fileName = await _expenseService.ExportMonthlyReportAsync(month, year);
+
+        // Devolvemos el nombre del archivo generado
+        return Success(new { fileName });
+    }
 }

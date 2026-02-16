@@ -12,15 +12,18 @@ public class ExpenseService : IExpenseService
 {
     private readonly IExpenseRepository _expenseRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IReportRepository _reportRepository;
 
     // Constructor para inyectar el repo de gastos y categorias
     public ExpenseService(
         IExpenseRepository expenseRepository,
-        ICategoryRepository categoryRepository
+        ICategoryRepository categoryRepository,
+        IReportRepository reportRepository
     )
     {
         _expenseRepository = expenseRepository;
         _categoryRepository = categoryRepository;
+        _reportRepository = reportRepository;
     }
 
     // Metodo para obtener la lista de gastos, con soporte para filtrar por categoria y rango de fechas, convertir los gastos a DTOs e incluir el nombre y color de la categoria en cada gasto para devolverlos al cliente
@@ -235,5 +238,24 @@ public class ExpenseService : IExpenseService
 
         // Creamos y devolvemos un objeto MonthlyReportDto con el mes, año, total gastado, presupuesto total y las estadisticas por categoria calculadas
         return new MonthlyReportDto(month, year, totalSpent, totalBudget, details);
+    }
+
+    // Metodo para exportar el reporte mensual de gastos a un archivo JSON utilizando el ReportRepository
+    // para guardar el reporte en el sistema de archivos, y devolver el nombre del archivo generado
+    public async Task<string> ExportMonthlyReportAsync(int month, int year)
+    {
+        // Obtenemos el reporte mensual utilizando el metodo GetMonthlyReportAsync() definido anteriormente
+        var report = await GetMonthlyReportAsync(month, year);
+
+        // Generamos un nombre de archivo unico para el reporte utilizando el mes y año del reporte,
+        // con el formato "resumen_YYYY_MM.json"
+        string fileName = $"resumen_{year}_{month:D2}.json";
+
+        // Guardamos el reporte en un archivo JSON utilizando el ReportRepository,
+        // pasando el nombre del archivo y el objeto de reporte a guardar
+        await _reportRepository.SaveReportAsync(fileName, report);
+
+        // Devolvemos el nombre del archivo generado para que el cliente pueda descargarlo o acceder a el posteriormente
+        return fileName;
     }
 }
