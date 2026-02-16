@@ -1,6 +1,5 @@
 using System.Net;
 using System.Text.Json;
-using Expenses.API.Models;
 using Expenses.Entities.Exceptions;
 
 namespace Expenses.API.Middlewares;
@@ -61,8 +60,13 @@ public class ExceptionMiddleware
         // Establecemos el código de estado HTTP en la respuesta
         context.Response.StatusCode = statusCode;
 
-        // Creamos un objeto de respuesta con el formato definido en ErrorResponse
-        var response = new ErrorResponse(statusCode, message, errorCode);
+        // Creamos un objeto de respuesta con el formato definido en ApiResponse, indicando que la respuesta no fue exitosa y proporcionando el mensaje de error
+        var response = new
+        {
+            Ok = false,
+            Data = (object?)null,
+            Error = new { code = errorCode, message },
+        };
 
         // Configuramos la serializacion del JSON para usar camelCase en los nombres de las propiedades
         var options = new JsonSerializerOptions
