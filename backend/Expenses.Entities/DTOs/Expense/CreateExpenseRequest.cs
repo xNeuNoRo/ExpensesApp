@@ -16,5 +16,5 @@ public record CreateExpenseRequest(
         ErrorMessage = "La fecha debe ser válida (año 1970 <= fecha <= año 3000)."
     )]
         DateTime Date,
-    [Required(ErrorMessage = "La categoría es obligatoria.")] Guid? CategoryId
+    [Required(ErrorMessage = "La categoría es obligatoria.")] Guid CategoryId
 );
