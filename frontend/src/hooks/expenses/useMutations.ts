@@ -27,6 +27,9 @@ export function useCreateExpense() {
       // Invalidamos la query de gastos para que se vuelva a consultar
       // en segundo plano en caso de que haya alguna inconsistencia
       queryClient.invalidateQueries({ queryKey: expenseKeys.all });
+      // Invalidamos la query de categorias también por si el nuevo gasto afecta a alguna categoría
+      // (ejemplo: si es el primer gasto de una categoría nueva)
+      queryClient.invalidateQueries({ queryKey: categoryKeys.all });
     },
     onError: (err) => {
       // Mostramos un mensaje de error al usuario si ocurre un error al crear el gasto
