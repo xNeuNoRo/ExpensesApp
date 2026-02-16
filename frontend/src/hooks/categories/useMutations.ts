@@ -8,6 +8,7 @@ import { Category } from "@/schemas/category";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
+// Hook para crear una nueva categoría
 export function useCreateCategory() {
   // Obtenemos el cliente de consultas de React Query para poder manipular la cache de consultas
   const queryClient = useQueryClient();
@@ -38,6 +39,7 @@ export function useCreateCategory() {
   });
 }
 
+// Hook para actualizar una categoría existente
 export function useUpdateCategory() {
   // Obtenemos el cliente de consultas de React Query para poder manipular la cache de consultas
   const queryClient = useQueryClient();
@@ -61,6 +63,7 @@ export function useUpdateCategory() {
   });
 }
 
+// Hook para eliminar una categoría
 export function useDeleteCategory() {
   // Obtenemos el cliente de consultas de React Query para poder manipular la cache de consultas
   const queryClient = useQueryClient();
