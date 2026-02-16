@@ -55,8 +55,8 @@ export const MonthlyReportSchema = z.object({
 
 // Tipos TypeScript inferidos a partir de los esquemas Zod
 export type Expense = z.infer<typeof ExpenseSchema>;
-export type CreateExpenseForm = z.infer<typeof CreateExpenseSchema>;
-export type UpdateExpenseForm = z.infer<typeof UpdateExpenseSchema>;
+export type CreateExpenseFormData = z.infer<typeof CreateExpenseSchema>;
+export type UpdateExpenseFormData = z.infer<typeof UpdateExpenseSchema>;
 export type ExpenseFilter = z.infer<typeof ExpenseFilterSchema>;
 export type CategoryStat = z.infer<typeof CategoryStatSchema>;
 export type MonthlyReport = z.infer<typeof MonthlyReportSchema>;
