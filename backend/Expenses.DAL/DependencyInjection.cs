@@ -13,10 +13,18 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        // Leemos las rutas de los archivos desde la config
-        var categoriesPath = configuration["FileStorage:CategoriesFile"] ?? "Data/categories.json";
-        var expensesPath = configuration["FileStorage:ExpensesFile"] ?? "Data/expenses.json";
-        var reportsPath = configuration["FileStorage:ReportsDirectory"] ?? "Data/Reports";
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+
+        // Obtenemos las rutas relativas de los archivos desde la configuración, 
+        // con valores por defecto si no están configurados
+        var categoriesRelativePath = configuration["FileStorage:CategoriesFile"] ?? "Data/categories.json";
+        var expensesRelativePath = configuration["FileStorage:ExpensesFile"] ?? "Data/expenses.json";
+        var reportsRelativePath = configuration["FileStorage:ReportsDirectory"] ?? "Data/Reports";
+
+        // Construimos las rutas absolutas combinando el directorio base con las rutas relativas
+        var categoriesPath = Path.Combine(basePath, categoriesRelativePath);
+        var expensesPath = Path.Combine(basePath, expensesRelativePath);
+        var reportsPath = Path.Combine(basePath, reportsRelativePath);
 
         // Registramos los repositorios como servicios singleton
         // Y pasamos la ruta del archivo directo al constructor
