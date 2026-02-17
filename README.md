@@ -105,7 +105,7 @@ dotnet restore
 dotnet watch run --project Expenses.API
 ```
 
-#### 1. Configurar el Frontend
+#### 2. Configurar el Frontend
 ```bash
 cd frontend
 # Instalar dependencias
