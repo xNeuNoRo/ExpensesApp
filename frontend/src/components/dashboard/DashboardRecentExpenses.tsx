@@ -3,11 +3,16 @@
 import { formatCurrency, formatDate } from "@/helpers/formatters";
 import { safeHex } from "@/helpers/safeHex";
 import { useExpenses } from "@/hooks/expenses/useQueries";
+import { useQueryString } from "@/hooks/shared/useQueryString";
 import { CATEGORY_ICONS } from "@/lib/category-icons";
 import Link from "next/link";
 import { IoPencil, IoShapes, IoTrash } from "react-icons/io5";
 
 export default function DashboardRecentExpenses() {
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+  const { createUrl } = useQueryString();
+
+  // Obtenemos los gastos usando el hook personalizado, sin filtros para mostrar los más recientes
   const { data: expenses, isLoading } = useExpenses({});
 
   // Función para obtener el componente de icono basado en la clave del icono
@@ -99,7 +104,10 @@ export default function DashboardRecentExpenses() {
                       <td className="px-6 py-4 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <Link
-                            href={`/?action=edit-expense&expenseId=${expense.id}`}
+                            href={createUrl({
+                              action: "edit-expense",
+                              expenseId: expense.id,
+                            })}
                             scroll={false}
                             className="inline-flex items-center justify-center rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-primary"
                             title="Editar gasto"
@@ -107,7 +115,10 @@ export default function DashboardRecentExpenses() {
                             <IoPencil className="h-5 w-5" />
                           </Link>
                           <Link
-                            href={`/?action=delete-expense&expenseId=${expense.id}`}
+                            href={createUrl({
+                              action: "delete-expense",
+                              expenseId: expense.id,
+                            })}
                             scroll={false}
                             className="p-2 text-muted hover:text-danger transition-colors"
                             title="Eliminar"
