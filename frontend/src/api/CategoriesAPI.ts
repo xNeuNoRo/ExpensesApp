@@ -76,7 +76,7 @@ export async function lookupCategories(): Promise<CategoryLookup[]> {
 export async function getCategoryById(id: Category["id"]): Promise<Category> {
   try {
     // Hacemos la petición a la API para obtener los detalles de la categoría con el ID proporcionado
-    const { data } = await api.get(`/categories/${id}`);
+    const { data } = await api.get(`/categories/${encodeURIComponent(id)}`);
     // Validamos la respuesta de la API usando el esquema de categoría
     return validateApiRes(data, CategorySchema);
   } catch (err) {
@@ -114,7 +114,7 @@ export async function updateCategory(
 ): Promise<void> {
   try {
     // Hacemos la petición a la API para actualizar la categoría con los datos proporcionados
-    await api.put(`/categories/${categoryData.id}`, categoryData);
+    await api.put(`/categories/${encodeURIComponent(categoryData.id)}`, categoryData);
   } catch (err) {
     handleApiError(err);
   }
@@ -128,7 +128,7 @@ export async function updateCategory(
 export async function deleteCategory(id: Category["id"]): Promise<void> {
   try {
     // Hacemos la petición a la API para eliminar la categoría con el ID proporcionado
-    await api.delete(`/categories/${id}`);
+    await api.delete(`/categories/${encodeURIComponent(id)}`);
   } catch (err) {
     handleApiError(err);
   }

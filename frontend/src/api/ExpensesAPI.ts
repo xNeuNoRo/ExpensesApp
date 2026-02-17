@@ -66,7 +66,7 @@ export async function getExpenses(filters?: ExpenseFilter): Promise<Expense[]> {
 export async function getExpenseById(id: Expense["id"]): Promise<Expense> {
   try {
     // Hacemos la petición a la API para obtener el gasto por su ID
-    const { data } = await api.get(`/expenses/${id}`);
+    const { data } = await api.get(`/expenses/${encodeURIComponent(id)}`);
     // Validamos la respuesta de la API usando el esquema de gasto
     const expense = validateApiRes(data, ExpenseSchema);
     // Si la validación es exitosa, retornamos el gasto obtenido
@@ -107,7 +107,7 @@ export async function getMonthlyReport(
   try {
     // Hacemos la petición a la API para obtener el reporte mensual de gastos con los filtros proporcionados
     const { data } = await api.get(
-      `/expenses/report/${date.year}/${date.month}`,
+      `/expenses/report/${encodeURIComponent(date.year)}/${encodeURIComponent(date.month)}`,
     );
     // Validamos la respuesta de la API usando el esquema de reporte mensual de gastos
     const report = validateApiRes(data, MonthlyReportSchema);
@@ -128,7 +128,7 @@ export async function updateExpense(
 ): Promise<void> {
   try {
     // Hacemos la petición a la API para actualizar el gasto con los datos proporcionados
-    await api.put(`/expenses/${expenseData.id}`, expenseData);
+    await api.put(`/expenses/${encodeURIComponent(expenseData.id)}`, expenseData);
   } catch (err) {
     handleApiError(err);
   }
@@ -142,7 +142,7 @@ export async function updateExpense(
 export async function deleteExpense(id: Expense["id"]): Promise<void> {
   try {
     // Hacemos la petición a la API para eliminar el gasto con el ID proporcionado
-    await api.delete(`/expenses/${id}`);
+    await api.delete(`/expenses/${encodeURIComponent(id)}`);
   } catch (err) {
     handleApiError(err);
   }
@@ -159,7 +159,7 @@ export async function exportMonthlyReport(
   try {
     // Hacemos la petición a la API para exportar el reporte mensual de gastos con los filtros proporcionados
     const { data } = await api.post(
-      `/expenses/report/${date.year}/${date.month}/export`,
+      `/expenses/report/${encodeURIComponent(date.year)}/${encodeURIComponent(date.month)}/export`,
     );
     // Validamos la respuesta de la API usando el esquema de reporte mensual de gastos
     const res = validateApiRes(data, ExportMonthlyReportResponseSchema);
