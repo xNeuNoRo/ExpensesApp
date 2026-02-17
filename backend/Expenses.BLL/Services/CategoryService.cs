@@ -58,8 +58,15 @@ public class CategoryService : ICategoryService
     // Metodo adicional para obtener una categoria por su nombre
     public async Task<CategoryResponseDto> GetCategoryByNameAsync(string name)
     {
+        var cleanedName = name.Trim();
+
+        if (string.IsNullOrEmpty(cleanedName))
+        {
+            throw AppException.BadRequest("El nombre de la categoría no puede estar vacío.");
+        }
+
         // Obtenemos la categoria por su nombre de la base de datos (JSON)
-        var category = await _categoryRepository.GetByNameAsync(name);
+        var category = await _categoryRepository.GetByNameAsync(cleanedName);
 
         // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
         if (category == null)
