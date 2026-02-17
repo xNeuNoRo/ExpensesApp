@@ -1,28 +1,49 @@
 "use client";
 
 import { formatCurrency, formatDate } from "@/helpers/formatters";
+import { safeHex } from "@/helpers/safeHex";
+import { sortExpenses } from "@/helpers/sorters";
 import { Expense } from "@/schemas/expense";
+import { useAppStore } from "@/stores/useAppStore";
 import Link from "next/link";
+import { useMemo } from "react";
 import { IoPencil, IoTrash, IoShapes } from "react-icons/io5";
+import SortableHeader from "../shared/SortableHeader";
 
 type ExpenseListTableProps = {
   expenses?: Expense[];
   isLoading: boolean;
 };
 
-// Helper para validar hex (mismo que usamos antes)
-const safeAlpha = (color: string | null | undefined, opacity: string) => {
-  if (!color) return undefined;
-  const isHex = /^#([A-Fa-f0-9]{3}){1,2}$/.test(color);
-  return isHex ? `${color}${opacity}` : undefined;
-};
-
 export default function ExpenseListTable({
   expenses,
   isLoading,
 }: Readonly<ExpenseListTableProps>) {
+  const { sortConfig, setSortConfig } = useAppStore((state) => state.expenses);
+
+  const sortedExpenses = useMemo(() => {
+    if (!expenses) return [];
+    return sortExpenses(expenses, sortConfig.field, sortConfig.direction);
+  }, [expenses, sortConfig]);
+
   if (isLoading)
     return <div className="h-96 animate-pulse rounded-xl bg-surface" />;
+
+  if (!expenses?.length) {
+    return (
+      <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-background text-center p-8">
+        <div className="rounded-full bg-surface p-4 mb-4">
+          <IoShapes className="h-8 w-8 text-muted" />
+        </div>
+        <h3 className="text-lg font-medium text-main">
+          No se encontraron gastos
+        </h3>
+        <p className="text-muted max-w-sm mt-1">
+          No hay gastos que coincidan con los filtros seleccionados.
+        </p>
+      </div>
+    );
+  }
 
   if (!expenses?.length) {
     return (
@@ -49,16 +70,27 @@ export default function ExpenseListTable({
             <tr>
               <th className="px-6 py-4 font-semibold">Gasto</th>
               <th className="px-6 py-4 font-semibold">Categoría</th>
-              <th className="px-6 py-4 font-semibold">Fecha</th>
-              <th className="px-6 py-4 font-semibold text-right">Monto</th>
+              <SortableHeader
+                field="date"
+                label="Fecha"
+                currentSort={sortConfig}
+                onSort={setSortConfig}
+              />
+              <SortableHeader
+                field="amount"
+                label="Monto"
+                align="right"
+                currentSort={sortConfig}
+                onSort={setSortConfig}
+              />
               <th className="px-6 py-4 font-semibold text-center">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {expenses.map((expense) => {
+            {sortedExpenses.map((expense) => {
               const categoryColor = expense.categoryColor;
-              const bgColor = safeAlpha(categoryColor, "20");
-              const borderColor = safeAlpha(categoryColor, "40");
+              const bgColor = safeHex(categoryColor, "20");
+              const borderColor = safeHex(categoryColor, "40");
 
               return (
                 <tr
