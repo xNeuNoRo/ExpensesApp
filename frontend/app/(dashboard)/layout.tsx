@@ -20,14 +20,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           >
             <IoMenu className="h-6 w-6" />
           </button>
-          <span className="font-bold text-primary">ExpensesApp</span>
+          <span className="font-bold text-primary">Expenses App</span>
         </div>
       </header>
 
       <Sidebar />
 
       <div className="p-4 sm:ml-64">
-        <main className="mx-auto max-w-7xl pt-4">{children}</main>
+        <main className="mx-auto max-w-7xl pt-12">{children}</main>
       </div>
     </div>
   );

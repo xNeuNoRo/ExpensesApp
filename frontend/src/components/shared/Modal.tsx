@@ -64,17 +64,15 @@ export default function Modal({
               >
                 {/* Header superior: Botón de cerrar integrado */}
                 <div className="flex items-start justify-between">
-                  <div className="w-full">
-                    {header}
-                    <DialogTitle
-                      as="h3"
-                      className={`text-2xl font-bold text-main font-display truncate ${
-                        header ? "mt-4" : ""
-                      }`}
-                    >
-                      {title}
-                    </DialogTitle>
-                  </div>
+                  {header}
+                  <DialogTitle
+                    as="h3"
+                    className={`text-2xl font-bold text-main font-display truncate ${
+                      header ? "mt-4" : ""
+                    }`}
+                  >
+                    {title}
+                  </DialogTitle>
                   <button
                     onClick={close}
                     className="ml-4 rounded-full p-1 text-muted hover:bg-surface hover:text-main hover:cursor-pointer transition-colors"

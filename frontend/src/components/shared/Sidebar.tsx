@@ -41,11 +41,11 @@ export default function Sidebar() {
           "fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-background transition-transform duration-300 ease-in-out sm:translate-x-0",
         )}
       >
-        <div className="flex h-full flex-col px-3 py-4">
+        <div className="flex h-full flex-col px-3 py-8">
           {/* Header del Sidebar */}
           <div className="mb-10 flex items-center justify-between pl-2.5">
             <span className="self-center whitespace-nowrap text-2xl font-bold text-primary">
-              ExpensesApp
+              Expenses App
             </span>
             <button
               onClick={closeSidebar}
