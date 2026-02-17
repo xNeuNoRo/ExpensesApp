@@ -1,6 +1,6 @@
 <Solution>
+  <Project Path="Expenses.API/Expenses.API.csproj" />
   <Project Path="Expenses.BLL/Expenses.BLL.csproj" />
   <Project Path="Expenses.DAL/Expenses.DAL.csproj" />
   <Project Path="Expenses.Entities/Expenses.Entities.csproj" />
-  <Project Path="Expenses.UI/Expenses.UI.csproj" />
 </Solution>
