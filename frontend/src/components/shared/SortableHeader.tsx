@@ -1,27 +1,26 @@
 "use client";
 
-import { SortConfig } from "@/types";
+import classNames from "@/helpers/classNames";
+import { ExpenseSortField, SortConfig } from "@/types";
 import { IoChevronUp, IoChevronDown } from "react-icons/io5";
 
-export type SortDirection = "asc" | "desc";
-
-type SortableHeaderProps<T = string> = {
-  field: T;
+type SortableHeaderProps = {
+  field: ExpenseSortField;
   label: string;
   currentSort: SortConfig; // Usamos la configuración genérica
-  onSort: (field: T) => void;
+  onSort: (field: ExpenseSortField) => void;
   align?: "left" | "center" | "right";
   className?: string;
 };
 
-export default function SortableHeader<T = string>({
+export default function SortableHeader({
   field,
   label,
   currentSort,
   onSort,
   align = "left",
   className = "",
-}: Readonly<SortableHeaderProps<T>>) {
+}: Readonly<SortableHeaderProps>) {
   const isSorted = currentSort.field === field;
 
   // Determinar el valor de aria-sort para accesibilidad
@@ -34,42 +33,51 @@ export default function SortableHeader<T = string>({
     ariaSortValue = "descending";
   }
 
-  // Clases de justificación para el contenido del header
-  let justifyClass = "justify-start";
-  if (align === "right") {
-    justifyClass = "justify-end";
-  } else if (align === "center") {
-    justifyClass = "justify-center";
-  }
+  // Clases de alineación para el contenido del header
+  const alignClasses = {
+    left: "justify-start text-left",
+    center: "justify-center text-center",
+    right: "justify-end text-right",
+  };
 
   return (
     <th
       scope="col"
-      className={`
-        px-6 py-4 font-semibold cursor-pointer select-none transition-colors 
-        hover:bg-surface/80 hover:text-main group 
-        text-${align} ${className}
-      `}
-      onClick={() => onSort(field)}
-      title={`Ordenar por ${label}`}
       aria-sort={ariaSortValue}
+      className={`p-0 font-semibold ${className}`}
     >
-      <div className={`flex items-center gap-1 ${justifyClass}`}>
-        {label}
-
-        {/* Icono de Ordenamiento */}
-        <span
-          className={`flex items-center transition-opacity ${isSorted ? "opacity-100" : "opacity-0 group-hover:opacity-30"}`}
+      <button
+        type="button"
+        onClick={() => onSort(field)}
+        className="group flex h-full w-full items-center px-6 py-4 transition-colors hover:cursor-pointer hover:bg-surface/80 hover:text-main focus:outline-none focus:bg-surface/80"
+      >
+        <div
+          className={`flex w-full items-center gap-1 ${alignClasses[align]}`}
         >
-          {isSorted && currentSort.direction === "asc" ? (
-            <IoChevronUp className="h-4 w-4 text-primary" />
-          ) : (
-            <IoChevronDown
-              className={`h-4 w-4 ${isSorted ? "text-primary" : "text-muted"}`}
-            />
-          )}
-        </span>
-      </div>
+          <span>{label}</span>
+
+          {/* Icono de Ordenamiento */}
+          <span
+            className={classNames(
+              isSorted
+                ? "opacity-100"
+                : "opacity-0 group-hover:opacity-50 group-focus:opacity-50",
+              "flex items-center transition-opacity",
+            )}
+          >
+            {isSorted && currentSort.direction === "asc" ? (
+              <IoChevronUp className="h-4 w-4 text-primary" />
+            ) : (
+              <IoChevronDown
+                className={classNames(
+                  isSorted ? "text-primary" : "text-muted",
+                  "h-4 w-4",
+                )}
+              />
+            )}
+          </span>
+        </div>
+      </button>
     </th>
   );
 }

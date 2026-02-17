@@ -17,8 +17,8 @@ export default function CategoriesLoading() {
         
         {/* Table Rows */}
         <div className="divide-y divide-border">
-          {new Array(8).map((_, i) => (
-            <div key={i + "-skeletonF"} className="flex items-center p-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i + "-skeleton"} className="flex items-center p-4">
               <div className="flex items-center gap-3 w-1/2">
                 <div className="h-9 w-9 rounded-lg bg-surface shrink-0" />
                 <div className="h-4 w-32 bg-surface rounded" />

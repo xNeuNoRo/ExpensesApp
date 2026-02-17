@@ -22,7 +22,7 @@ export default async function CategoriesPage({
 
   // Prefetch de las categorías para que estén disponibles inmediatamente en el cliente
   await queryClient.prefetchQuery({
-    queryKey: categoryKeys.all,
+    queryKey: categoryKeys.lists(),
     queryFn: getCategories,
   });
 

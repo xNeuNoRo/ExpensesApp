@@ -24,6 +24,9 @@ export default function CategorySelect({
   // Generamos un ID único para el select y su label, asegurando accesibilidad y asociación correcta.
   const categorySelectId = useId();
 
+  // Si el valor es undefined, lo convertimos a string vacío para evitar problemas con el select
+  const catValue = value ?? "";
+
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       <label
@@ -40,7 +43,7 @@ export default function CategorySelect({
 
         <select
           id={categorySelectId}
-          value={value}
+          value={catValue}
           onChange={(e) => onChange(e.target.value)}
           disabled={isLoading}
           className={`

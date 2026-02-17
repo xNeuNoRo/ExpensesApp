@@ -54,7 +54,7 @@ export default function DeleteExpenseModal() {
       {/* Modal de Confirmacion para borrar */}
       <Modal
         title="Confirmar Eliminación"
-        open={action === "delete-expense"}
+        open={openModal}
         close={closeModal}
         size="small"
       >

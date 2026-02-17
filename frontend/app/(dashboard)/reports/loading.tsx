@@ -15,7 +15,7 @@ export default function ReportsLoading() {
 
       {/* Summary Cards Skeleton */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {new Array(4).map((_, i) => (
+        {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i+"-skeleton"}
             className="h-32 bg-surface rounded-xl border border-border"

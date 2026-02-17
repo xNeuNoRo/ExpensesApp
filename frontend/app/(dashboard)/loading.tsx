@@ -9,7 +9,7 @@ export default function DashboardLoading() {
 
       {/* Summary Cards Skeleton */}
       <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-        {new Array(3).map((_, i) => (
+        {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i + "-skeleton"}
             className="h-32 bg-surface rounded-xl border border-border"

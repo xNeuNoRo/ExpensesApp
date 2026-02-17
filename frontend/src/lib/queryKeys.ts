@@ -15,11 +15,11 @@ export const categoryKeys = {
 export const expenseKeys = {
   all: ["expenses"] as const,
   lists: () => [...expenseKeys.all, "list"] as const,
-  list: (filters: Record<string, unknown>) =>
-    [...expenseKeys.lists(), { filters }] as const,
+  list: <T extends object>(filters?: Readonly<T>) =>
+    [...expenseKeys.lists(), { filters: filters ?? {} }] as const,
   detail: (id: string) => [...expenseKeys.all, "detail", id] as const,
-  summary: (filters: Record<string, unknown>) =>
-    [...expenseKeys.all, "summary", { filters }] as const,
+  summary: <T extends object>(filters?: Readonly<T>) =>
+    [...expenseKeys.all, "summary", { filters: filters ?? {} }] as const,
   report: (year: number, month: number) =>
     [...expenseKeys.all, "report", { year, month }] as const,
 };
