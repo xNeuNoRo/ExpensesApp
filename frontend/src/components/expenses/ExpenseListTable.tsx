@@ -6,7 +6,8 @@ import { sortExpenses } from "@/helpers/sorters";
 import { Expense } from "@/schemas/expense";
 import { useAppStore } from "@/stores/useAppStore";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useMemo, useRef } from "react";
 import { IoPencil, IoTrash, IoShapes } from "react-icons/io5";
 import SortableHeader from "../shared/SortableHeader";
 import StatsBar from "../shared/StatsBar";
@@ -23,12 +24,35 @@ export default function ExpenseListTable({
 }: Readonly<ExpenseListTableProps>) {
   const { sortConfig, setSortConfig } = useAppStore((state) => state.expenses);
 
+  // Referencia para el contenedor de la tabla, necesaria para la virtualización
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  // Ordenamos los gastos usando useMemo para evitar cálculos innecesarios en cada renderizado.
+  // La función sortExpenses se encarga de ordenar el array de gastos según el campo y
+  // la dirección especificados en sortConfig.
   const sortedExpenses = useMemo(() => {
     if (!expenses) return [];
     return sortExpenses(expenses, sortConfig.field, sortConfig.direction);
   }, [expenses, sortConfig]);
 
+  // Obtenemos las estadísticas de gastos usando el hook personalizado, pasando los gastos ordenados
   const statItems = useExpenseStats(sortedExpenses);
+
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const rowVirtualizer = useVirtualizer({
+    count: sortedExpenses.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 73, // Altura estimada de cada fila en píxeles
+    overscan: 5, // Cantidad de elementos extra a renderizar fuera de vista
+  });
+
+  // Cálculo de los espacios de padding superior e inferior 
+  // para mantener el scroll correcto en el virtualizador
+  const virtualRows = rowVirtualizer.getVirtualItems();
+  const totalSize = rowVirtualizer.getTotalSize();
+  const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
+  const paddingBottom =
+    virtualRows.length > 0 ? totalSize - (virtualRows?.at(-1)?.end || 0) : 0;
 
   if (isLoading)
     return <div className="h-96 animate-pulse rounded-xl bg-surface" />;
@@ -70,9 +94,12 @@ export default function ExpenseListTable({
     <div className="space-y-4">
       <StatsBar items={statItems} />
       <div className="rounded-xl border border-border bg-background shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-surface text-xs uppercase text-muted border-b border-border">
+        <div
+          ref={parentRef}
+          className="overflow-auto max-h-91.25 scrollbar-thin"
+        >
+          <table className="w-full text-left text-sm border-collapse table-fixed">
+            <thead className="sticky top-0 z-10 bg-surface text-xs uppercase text-muted border-b border-border">
               <tr>
                 <th className="px-6 py-4 font-semibold">Gasto</th>
                 <th className="px-6 py-4 font-semibold">Categoría</th>
@@ -94,16 +121,29 @@ export default function ExpenseListTable({
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
-              {sortedExpenses.map((expense) => {
+            <tbody>
+              {/* Espaciador Superior */}
+              {paddingTop > 0 && (
+                // Si hay espacio de padding superior,
+                // renderizamos una fila vacía con la altura del padding para mantener el scroll correcto
+                <tr>
+                  <td style={{ height: `${paddingTop}px` }} colSpan={5} />
+                </tr>
+              )}
+
+              {/* Filas Virtuales */}
+              {virtualRows.map((virtualRow) => {
+                const expense = sortedExpenses[virtualRow.index];
                 const categoryColor = expense.categoryColor;
                 const bgColor = safeHex(categoryColor, "20");
                 const borderColor = safeHex(categoryColor, "40");
 
                 return (
                   <tr
-                    key={expense.id}
-                    className="hover:bg-surface/50 transition-colors"
+                    key={virtualRow.key}
+                    data-index={virtualRow.index}
+                    ref={rowVirtualizer.measureElement}
+                    className="hover:bg-surface/50 transition-colors border-b border-border last:border-0"
                   >
                     <td className="px-6 py-4">
                       <div className="font-medium text-main">
@@ -131,7 +171,7 @@ export default function ExpenseListTable({
                       {formatDate(expense.date)}
                     </td>
 
-                    <td className="px-6 py-4 text-right font-bold text-main">
+                    <td className="px-6 py-4 text-right font-bold text-main tabular-nums">
                       {formatCurrency(expense.amount)}
                     </td>
 
@@ -156,6 +196,15 @@ export default function ExpenseListTable({
                   </tr>
                 );
               })}
+
+              {/* Espaciador Inferior */}
+              {paddingBottom > 0 && (
+                // Si hay espacio de padding inferior,
+                // renderizamos una fila vacía con la altura del padding para mantener el scroll correcto
+                <tr>
+                  <td style={{ height: `${paddingBottom}px` }} colSpan={5} />
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
