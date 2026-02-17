@@ -9,7 +9,8 @@ public static class ExpenseMappingExtensions
     public static ExpenseResponseDto ToDto(
         this Expense expense,
         string categoryName = "Sin Categoria",
-        string categoryColor = "#000000"
+        string categoryColor = "#000000",
+        string categoryIcon = "DefaultIcon"
     )
     {
         return new ExpenseResponseDto(
@@ -20,7 +21,8 @@ public static class ExpenseMappingExtensions
             expense.Date,
             expense.CategoryId,
             categoryName,
-            categoryColor
+            categoryColor,
+            categoryIcon
         );
     }
 
@@ -42,7 +44,11 @@ public static class ExpenseMappingExtensions
 
             // Utilizamos el metodo ToDto de Expense para convertir el gasto a un DTO,
             // pasando el nombre y color de la categoria (o valores por defecto si no se encuentra la categoria)
-            return e.ToDto(category?.Name ?? "Sin Categoria", category?.Color ?? "#000000");
+            return e.ToDto(
+                category?.Name ?? "Sin Categoria",
+                category?.Color ?? "#000000",
+                category?.IconKey ?? "DefaultIcon"
+            );
         });
     }
 

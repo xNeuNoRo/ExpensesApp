@@ -68,7 +68,11 @@ public class ExpenseService : IExpenseService
         var category = await _categoryRepository.GetByIdAsync(expense.CategoryId);
 
         // Convertimos el gasto a DTO utilizando el metodo de extension ToDto() definido en ExpenseMappingExtensions, pasando tambien el nombre y color de la categoria para incluirlos en el DTO
-        return expense.ToDto(category?.Name ?? "Sin Categoria", category?.Color ?? "#000000");
+        return expense.ToDto(
+            category?.Name ?? "Sin Categoria",
+            category?.Color ?? "#000000",
+            category?.IconKey ?? "DefaultIcon"
+        );
     }
 
     // Metodo para crear un nuevo gasto, con sus respectivas validaciones, y devolver el gasto creado como DTO al cliente
@@ -93,7 +97,7 @@ public class ExpenseService : IExpenseService
         await _expenseRepository.AddAsync(expense);
 
         // Convertimos el gasto a DTO utilizando el metodo de extension ToDto() definido en ExpenseMappingExtensions, pasando tambien el nombre y color de la categoria para incluirlos en el DTO
-        return expense.ToDto(category.Name, category.Color);
+        return expense.ToDto(category.Name, category.Color, category.IconKey);
     }
 
     // Metodo para actualizar un gasto existente por su ID, con sus respectivas validaciones, y devolver la categoria actualizada como DTO al cliente
@@ -229,6 +233,7 @@ public class ExpenseService : IExpenseService
                 return new CategoryStatDto(
                     cat?.Name ?? "Sin Categoría",
                     cat?.Color ?? "#000000",
+                    cat?.IconKey ?? "DefaultIcon",
                     spentAmount,
                     cat?.MonthlyBudget ?? 0,
                     Math.Round(percentage, 2),

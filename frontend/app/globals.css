@@ -1,64 +1,78 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap");
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 
+/* Configuración de Modo Oscuro para Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
-  /* Colores de Marca y Fondos */
-  --color-primary: #0ea5e9;
-  --color-secondary: #6366f1;
-  --color-background: #ffffff;
-  --color-surface: #f8fafc;
+  /* Colores Estructurales */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+
+  /* Colores de Texto */
+  --color-main: var(--text-main); /* Clase: text-main */
+  --color-muted: var(--text-muted); /* Clase: text-muted */
+
+  /* Colores de Marca */
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
 
   /* Colores de Estado */
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #f59e0b;
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
 
-  /* Colores de Texto y Bordes */
-  --color-text-main: #0f172a;
-  --color-text-muted: #64748b;
-  --color-border: #e2e8f0;
+  /* Categorías */
+  --color-cat-food: #f97316;
+  --color-cat-health: #ec4899;
+  --color-cat-leisure: #8b5cf6;
+  --color-cat-saving: #22c55e;
+  --color-cat-housing: #3b82f6;
+  --color-cat-subscriptions: #06b6d4;
 
-  /* Colores para Categorías */
-  --color-cat-food: #f97316; /* Naranja */
-  --color-cat-health: #ec4899; /* Rosa */
-  --color-cat-leisure: #8b5cf6; /* Violeta */
-  --color-cat-saving: #22c55e; /* Verde */
-  --color-cat-housing: #3b82f6; /* Azul */
-  --color-cat-subscriptions: #06b6d4; /* Cian */
-
-  /** Tipografías **/
-
-  /* Texto general */
+  /* Tipografías */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-
-  /* Titulos */
   --font-display: "Space Grotesk", var(--font-sans);
-
-  /* Datos tecnicos */
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 @layer base {
   :root {
-    /* Mapeo de colores para uso fuera de Tailwind */
-    --primary: var(--color-primary);
-    --secondary: var(--color-secondary);
-    --background: var(--color-background);
-    --surface: var(--color-surface);
-    --success: var(--color-success);
-    --danger: var(--color-danger);
-    --warning: var(--color-warning);
+    /* --- MODO LIGHT (Default) --- */
+    --background: #f1f5f9;
+    --surface: #ffffff;
+    --text-main: #0f172a; /* Slate-900 */
+    --text-muted: #64748b; /* Slate-500 */
+    --border: #e2e8f0; /* Slate-200 */
 
-    /* Configuración por defecto de la página */
-    background-color: var(--color-background);
-    color: var(--color-text-main);
+    --primary: #0ea5e9; /* Sky-500 */
+    --secondary: #6366f1; /* Indigo-500 */
+
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+
+    /* Estilos Base Globales */
+    background-color: var(--background);
+    color: var(--text-main);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Estilos específicos para títulos usando la fuente Display */
+  /* --- MODO DARK (Valores invertidos) --- */
+  .dark {
+    --background: #0f172a; /* Slate-900 */
+    --surface: #1e293b; /* Slate-800 */
+    --text-main: #f8fafc; /* Slate-50 */
+    --text-muted: #94a3b8; /* Slate-400 */
+    --border: #334155; /* Slate-700 */
+    --primary: #38bdf8; /* Sky-400 */
+    --secondary: #818cf8; /* Indigo-400 */
+  }
+
+  /* config de los títulos para que usen siempre la fuente Display y el color principal */
   h1,
   h2,
   h3,
@@ -67,17 +81,6 @@
   h6 {
     font-family: var(--font-display);
     font-weight: 700;
-    color: var(--color-text-main);
-  }
-
-  /* Estilos para textos secundarios */
-  p,
-  span,
-  label {
-    color: var(--color-text-main);
-  }
-
-  .text-muted {
-    color: var(--color-text-muted);
+    color: var(--text-main);
   }
 }
