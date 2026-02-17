@@ -46,7 +46,7 @@ export default function ExpenseListTable({
     overscan: 5, // Cantidad de elementos extra a renderizar fuera de vista
   });
 
-  // Cálculo de los espacios de padding superior e inferior 
+  // Cálculo de los espacios de padding superior e inferior
   // para mantener el scroll correcto en el virtualizador
   const virtualRows = rowVirtualizer.getVirtualItems();
   const totalSize = rowVirtualizer.getTotalSize();
@@ -54,9 +54,11 @@ export default function ExpenseListTable({
   const paddingBottom =
     virtualRows.length > 0 ? totalSize - (virtualRows?.at(-1)?.end || 0) : 0;
 
+  // Si los datos aún se están cargando, mostramos un placeholder animado
   if (isLoading)
     return <div className="h-96 animate-pulse rounded-xl bg-surface" />;
 
+  // Si no hay gastos, mostramos un mensaje indicando que no se encontraron resultados.
   if (!expenses?.length) {
     return (
       <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-background text-center p-8">
@@ -68,23 +70,6 @@ export default function ExpenseListTable({
         </h3>
         <p className="text-muted max-w-sm mt-1">
           No hay gastos que coincidan con los filtros seleccionados.
-        </p>
-      </div>
-    );
-  }
-
-  if (!expenses?.length) {
-    return (
-      <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-background text-center p-8">
-        <div className="rounded-full bg-surface p-4 mb-4">
-          <IoShapes className="h-8 w-8 text-muted" />
-        </div>
-        <h3 className="text-lg font-medium text-main">
-          No se encontraron gastos
-        </h3>
-        <p className="text-muted max-w-sm mt-1">
-          No hay gastos que coincidan con los filtros seleccionados o aún no has
-          registrado ninguno.
         </p>
       </div>
     );
