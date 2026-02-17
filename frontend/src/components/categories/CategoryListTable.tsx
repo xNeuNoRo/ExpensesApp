@@ -1,44 +1,49 @@
 "use client";
 
-import { formatCurrency } from "@/helpers/formatters";
-import { useCategories } from "@/hooks/categories/useQueries";
-import { CATEGORY_ICONS } from "@/lib/category-icons";
+import { useRef } from "react";
 import Link from "next/link";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { IoCreate, IoShapes, IoTrash } from "react-icons/io5";
-import { useRef } from "react";
+import { formatCurrency } from "@/helpers/formatters";
+import { CATEGORY_ICONS } from "@/lib/category-icons";
+import { Category } from "@/schemas/category"; // Asegúrate de importar tu tipo
 
-export default function CategoryList() {
-  // Obtención de categorías y estado de carga usando el hook personalizado
-  const { data: categories, isLoading } = useCategories();
+interface CategoryListTableProps {
+  categories: Category[];
+  isLoading: boolean;
+}
 
-  // Referencia al contenedor del scroll para el virtualizador
+export default function CategoryListTable({
+  categories,
+  isLoading,
+}: Readonly<CategoryListTableProps>) {
+  // Configuración de virtualización para la tabla de categorías
   const parentRef = useRef<HTMLDivElement>(null);
 
-  // Configuración del virtualizador de filas para la tabla de categorías
+  // Virtualización de filas usando useVirtualizer de TanStack Virtual
   // eslint-disable-next-line react-hooks/incompatible-library
   const rowVirtualizer = useVirtualizer({
     count: categories?.length ?? 0,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 69, // Altura estimada de la fila de categoria
+    estimateSize: () => 69,
     overscan: 5,
   });
 
-  // Cálculo de los espacios de padding superior e inferior
-  // para mantener el scroll correcto en el virtualizador
+  // Obtenemos las filas virtuales que deben renderizarse y el tamaño total para calcular los paddings
   const virtualRows = rowVirtualizer.getVirtualItems();
   const totalSize = rowVirtualizer.getTotalSize();
+
+  // Cálculo de padding para simular el espacio de las filas no renderizadas en la parte superior e inferior de la tabla
   const paddingTop = virtualRows.length > 0 ? virtualRows[0].start : 0;
   const paddingBottom =
     virtualRows.length > 0 ? totalSize - (virtualRows.at(-1)?.end || 0) : 0;
 
-  // Función para obtener el componente de icono basado en la clave del icono
+  // Función auxiliar para obtener el componente de ícono basado en la clave del ícono de la categoría
   const getIcon = (iconKey?: string | null) => {
-    if (!iconKey || !CATEGORY_ICONS[iconKey]) return IoShapes; // Default
+    if (!iconKey || !CATEGORY_ICONS[iconKey]) return IoShapes;
     return CATEGORY_ICONS[iconKey];
   };
 
-  // Renderizado de un placeholder de carga mientras se obtienen las categorías
   if (isLoading)
     return <div className="h-64 animate-pulse rounded-xl bg-surface" />;
 
@@ -64,16 +69,17 @@ export default function CategoryList() {
           <tbody className="divide-y divide-border bg-background">
             {categories && categories.length > 0 ? (
               <>
-                {/* Espaciador Superior */}
+              {/* Espaciador Superior */}
                 {paddingTop > 0 && (
                   <tr>
                     <td style={{ height: `${paddingTop}px` }} colSpan={4} />
                   </tr>
                 )}
 
-                {/* Renderizado de filas visibles */}
                 {virtualRows.map((virtualRow) => {
+                  // Obtenemos la categoría correspondiente a la fila virtual actual
                   const cat = categories[virtualRow.index];
+                  // Obtenemos el componente de ícono para la categoría actual
                   const IconComponent = getIcon(cat.iconKey);
 
                   return (

@@ -7,7 +7,7 @@ import {
 } from "@/api/CategoriesAPI";
 import { categoryKeys } from "@/lib/queryKeys";
 import { Category } from "@/schemas/category";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 // Hook para obtener la lista de categorías de gastos
 export function useCategories() {
@@ -44,6 +44,7 @@ export function useValidateCategoryName(name: Category["name"]) {
     enabled: !!name && name.trim().length >= 3,
     retry: false,
     staleTime: 0, // Siempre valida fresco
+    placeholderData: keepPreviousData, // Mantiene los datos anteriores mientras se valida el nuevo nombre para evitar parpadeos en la UI
   });
 }
 
