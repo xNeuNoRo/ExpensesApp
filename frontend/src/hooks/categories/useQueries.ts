@@ -2,6 +2,7 @@ import {
   getCategories,
   getCategoryById,
   lookupCategories,
+  searchCategoriesByName,
   validateCategoryName,
 } from "@/api/CategoriesAPI";
 import { categoryKeys } from "@/lib/queryKeys";
@@ -39,6 +40,18 @@ export function useValidateCategoryName(name: Category["name"]) {
   return useQuery({
     queryKey: categoryKeys.validate(name),
     queryFn: () => validateCategoryName(name),
+    // Solo se ejecuta si el nombre tiene al menos 3 caracteres
+    enabled: !!name && name.trim().length >= 3,
+    retry: false,
+    staleTime: 0, // Siempre valida fresco
+  });
+}
+
+// Hook para buscar categorías por su nombre
+export function useSearchCategoriesByName(name: Category["name"]) {
+  return useQuery({
+    queryKey: categoryKeys.search(name),
+    queryFn: () => searchCategoriesByName(name),
     // Solo se ejecuta si el nombre tiene al menos 3 caracteres
     enabled: !!name && name.trim().length >= 3,
     retry: false,

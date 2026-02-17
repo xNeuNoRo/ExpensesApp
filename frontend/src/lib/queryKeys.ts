@@ -8,6 +8,7 @@ export const categoryKeys = {
   lookup: () => [...categoryKeys.all, "lookup"] as const,
   detail: (id: string) => [...categoryKeys.all, "detail", id] as const,
   validate: (name: string) => [...categoryKeys.all, "validate", name] as const,
+  search: (name: string) => [...categoryKeys.all, "search", name] as const,
 };
 
 // Query keys para gastos

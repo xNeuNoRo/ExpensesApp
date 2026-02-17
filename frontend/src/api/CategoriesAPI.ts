@@ -89,16 +89,16 @@ export async function getCategoryById(id: Category["id"]): Promise<Category> {
  * @param name El nombre de la categoría que se desea obtener. Debe ser una cadena de texto no vacía.
  * @returns {Promise<Category>} El objeto de categoría correspondiente al nombre proporcionado. Si la consulta es exitosa, se retorna el objeto de categoría. Si ocurre un error, se lanza una excepción con un mensaje específico del error.
  */
-export async function getCategoryByName(
+export async function searchCategoriesByName(
   name: Category["name"],
-): Promise<Category> {
+): Promise<Category[]> {
   try {
     // Hacemos la petición a la API para obtener los detalles de la categoría con el nombre proporcionado
     const { data } = await api.get("/categories/search", {
       params: { name },
     });
     // Validamos la respuesta de la API usando el esquema de categoría
-    return validateApiRes(data, CategorySchema);
+    return validateApiRes(data, CategoriesSchema);
   } catch (err) {
     handleApiError(err);
   }
