@@ -46,9 +46,9 @@ export default function CategoryList() {
     <div className="rounded-xl border border-border bg-background shadow-sm overflow-hidden">
       <div
         ref={parentRef}
-        className="relative overflow-auto max-h-149.5 scrollbar-thin"
+        className="relative overflow-auto w-full max-h-149.5 scrollbar-thin"
       >
-        <table className="w-full text-left text-sm border-collapse table-fixed">
+        <table className="min-w-200 w-full text-left text-sm border-collapse table-fixed">
           <thead className="sticky top-0 z-10 bg-surface text-xs uppercase text-muted border-b border-border shadow-sm">
             <tr>
               <th className="px-6 py-4 font-semibold w-1/2">Nombre</th>
@@ -61,7 +61,7 @@ export default function CategoryList() {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-border bg-background">
             {categories && categories.length > 0 ? (
               <>
                 {/* Espaciador Superior */}
@@ -84,11 +84,11 @@ export default function CategoryList() {
                       className="hover:bg-surface/50 transition-colors"
                     >
                       <td className="px-6 py-3 font-medium text-main">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 overflow-hidden">
                           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-muted">
                             <IconComponent className="h-5 w-5" />
                           </div>
-                          <span className="truncate">{cat.name}</span>
+                          <span className="truncate block">{cat.name}</span>
                         </div>
                       </td>
                       <td className="px-6 py-3 text-muted">

@@ -158,7 +158,7 @@ export async function exportMonthlyReport(
 ): Promise<string> {
   try {
     // Hacemos la petición a la API para exportar el reporte mensual de gastos con los filtros proporcionados
-    const { data } = await api.get(
+    const { data } = await api.post(
       `/expenses/report/${date.year}/${date.month}/export`,
     );
     // Validamos la respuesta de la API usando el esquema de reporte mensual de gastos

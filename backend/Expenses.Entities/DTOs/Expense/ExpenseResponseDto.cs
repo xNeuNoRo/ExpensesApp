@@ -8,5 +8,6 @@ public record ExpenseResponseDto(
     DateTime Date,
     Guid CategoryId,
     string CategoryName,
-    string CategoryColor
+    string CategoryColor,
+    string CategoryIcon
 );

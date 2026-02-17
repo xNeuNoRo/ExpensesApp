@@ -44,7 +44,7 @@ export default function CategorySelect({
           onChange={(e) => onChange(e.target.value)}
           disabled={isLoading}
           className={`
-            block w-full rounded-lg border bg-surface py-2.5 pl-10 pr-3 text-sm text-main transition-all
+            block w-full rounded-lg border bg-surface py-2.5 pl-10 pr-3 text-sm text-main transition-all hover:cursor-pointer
             focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary
             disabled:opacity-50
             ${error ? "border-danger" : "border-border"}

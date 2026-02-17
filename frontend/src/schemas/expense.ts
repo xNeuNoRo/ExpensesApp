@@ -10,6 +10,7 @@ export const ExpenseSchema = z.object({
   categoryId: z.uuid(),
   categoryName: z.string().optional(),
   categoryColor: z.string().optional(),
+  categoryIcon: z.string().optional(),
 });
 
 // Esquema para un array de gastos
@@ -48,6 +49,7 @@ export const ExpenseFilterSchema = z.object({
 export const CategoryStatSchema = z.object({
   categoryName: z.string(),
   categoryColor: z.string(),
+  categoryIcon: z.string(),
   amountSpent: z.number(),
   monthlyBudget: z.number(),
   percentage: z.number(),

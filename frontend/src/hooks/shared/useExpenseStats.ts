@@ -33,7 +33,6 @@ export function useExpenseStats(expenses: Expense[] | undefined): StatItem[] {
       {
         label: "Mayor Gasto",
         value: formatCurrency(max),
-        hiddenOnMobile: true,
       },
       {
         label: "Total",

@@ -24,9 +24,12 @@ export default function StatsBar({
 
   return (
     <div
-      className={`flex justify-end animate-in fade-in slide-in-from-bottom-2 ${className}`}
+      className={classNames(
+        "flex justify-end animate-in fade-in slide-in-from-bottom-2 select-none",
+        className,
+      )}
     >
-      <div className="inline-flex items-stretch divide-x divide-border rounded-xl border border-border bg-surface shadow-sm overflow-hidden">
+      <div className="grid grid-cols-2 lg:flex lg:flex-row items-stretch rounded-xl border border-border bg-surface shadow-sm overflow-hidden divide-y lg:divide-y-0 lg:divide-x divide-border w-full lg:w-auto">
         {items.map((item, index) => {
           const isHighlight = item.variant === "highlight";
 
@@ -35,24 +38,35 @@ export default function StatsBar({
               key={item.label + index}
               className={classNames(
                 item.hiddenOnMobile ? "hidden sm:flex" : "flex",
+                "flex-col justify-center py-3 px-3 lg:px-5 min-w-0 lg:min-w-fit flex-1",
                 isHighlight
-                  ? "px-6 items-end bg-primary/5 min-w-35" // Estilo destacado
-                  : "px-5 items-center min-w-25 bg-surface", // Estilo normal
-                "flex flex-col justify-center py-3",
+                  ? "bg-primary/5 items-center lg:items-end lg:px-6"
+                  : "bg-surface items-center",
+                index % 2 === 0 ? "" : "border-l border-border lg:border-l-0",
               )}
             >
               <span
                 className={classNames(
                   isHighlight ? "text-primary/80" : "text-muted",
-                  "text-[10px] font-bold uppercase tracking-wider",
+                  "text-[10px] font-bold uppercase tracking-wider w-full",
+                  "whitespace-normal lg:whitespace-nowrap leading-tight",
+                  isHighlight
+                    ? "text-center lg:text-right"
+                    : "text-center lg:text-left",
                 )}
               >
                 {item.label}
               </span>
+
               <span
                 className={classNames(
                   isHighlight ? "text-primary" : "text-main",
-                  "text-lg font-bold tabular-nums",
+                  "font-bold tabular-nums w-full",
+                  "whitespace-normal break-all lg:whitespace-nowrap lg:break-normal",
+                  "text-sm lg:text-xl",
+                  isHighlight
+                    ? "text-center lg:text-right"
+                    : "text-center lg:text-left",
                 )}
               >
                 {item.value}

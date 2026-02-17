@@ -12,6 +12,7 @@ import { IoPencil, IoTrash, IoShapes } from "react-icons/io5";
 import SortableHeader from "../shared/SortableHeader";
 import StatsBar from "../shared/StatsBar";
 import { useExpenseStats } from "@/hooks/shared/useExpenseStats";
+import { CATEGORY_ICONS } from "@/lib/category-icons";
 
 type ExpenseListTableProps = {
   expenses?: Expense[];
@@ -34,6 +35,12 @@ export default function ExpenseListTable({
     if (!expenses) return [];
     return sortExpenses(expenses, sortConfig.field, sortConfig.direction);
   }, [expenses, sortConfig]);
+
+  // Función para obtener el componente de icono basado en la clave del icono
+  const getIcon = (iconKey?: string | null) => {
+    if (!iconKey || !CATEGORY_ICONS[iconKey]) return IoShapes; // Default
+    return CATEGORY_ICONS[iconKey];
+  };
 
   // Obtenemos las estadísticas de gastos usando el hook personalizado, pasando los gastos ordenados
   const statItems = useExpenseStats(sortedExpenses);
@@ -81,9 +88,9 @@ export default function ExpenseListTable({
       <div className="rounded-xl border border-border bg-background shadow-sm overflow-hidden">
         <div
           ref={parentRef}
-          className="overflow-auto max-h-91.25 scrollbar-thin"
+          className="relative overflow-auto w-full max-h-91.25 scrollbar-thin"
         >
-          <table className="w-full text-left text-sm border-collapse table-fixed">
+          <table className="min-w-175 w-full text-left text-sm border-collapse table-fixed">
             <thead className="sticky top-0 z-10 bg-surface text-xs uppercase text-muted border-b border-border">
               <tr>
                 <th className="px-6 py-4 font-semibold">Gasto</th>
@@ -106,7 +113,7 @@ export default function ExpenseListTable({
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border bg-background">
               {/* Espaciador Superior */}
               {paddingTop > 0 && (
                 // Si hay espacio de padding superior,
@@ -120,6 +127,7 @@ export default function ExpenseListTable({
               {virtualRows.map((virtualRow) => {
                 const expense = sortedExpenses[virtualRow.index];
                 const categoryColor = expense.categoryColor;
+                const IconComponent = getIcon(expense.categoryIcon);
                 const bgColor = safeHex(categoryColor, "20");
                 const borderColor = safeHex(categoryColor, "40");
 
@@ -131,7 +139,7 @@ export default function ExpenseListTable({
                     className="hover:bg-surface/50 transition-colors border-b border-border last:border-0"
                   >
                     <td className="px-6 py-4">
-                      <div className="font-medium text-main">
+                      <div className="font-medium text-main truncate">
                         {expense.name}
                       </div>
                       <div className="text-xs text-muted truncate max-w-50">
@@ -141,14 +149,18 @@ export default function ExpenseListTable({
 
                     <td className="px-6 py-4">
                       <span
-                        className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                        className="inline-flex gap-1.5 items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
                         style={{
                           backgroundColor: bgColor ?? "var(--surface)",
                           color: categoryColor ?? "inherit",
                           borderColor: borderColor ?? "var(--border)",
                         }}
                       >
-                        {expense.categoryName || "General"}
+                        <IconComponent className="h-3.5 w-3.5 shrink-0" />
+
+                        <span className="truncate max-w-25">
+                          {expense.categoryName || "Sin Categoría"}
+                        </span>
                       </span>
                     </td>
 
