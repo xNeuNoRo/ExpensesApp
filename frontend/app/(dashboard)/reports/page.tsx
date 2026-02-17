@@ -40,7 +40,7 @@ export default async function ReportsPage({
   // Enviamos el estado hidratado al cliente
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ReportsPageContent />
+      <ReportsPageContent initialMonth={month} initialYear={year} />
     </HydrationBoundary>
   );
 }

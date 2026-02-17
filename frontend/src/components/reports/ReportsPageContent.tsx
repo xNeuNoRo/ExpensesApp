@@ -8,20 +8,23 @@ import ExportReportButton from "@/components/reports/ExportReportButton";
 import { IoBarChart } from "react-icons/io5";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function ReportsPageContent() {
+type ReportsPageContentProps = {
+  initialMonth: number;
+  initialYear: number;
+};
+
+export default function ReportsPageContent({
+  initialMonth,
+  initialYear,
+}: Readonly<ReportsPageContentProps>) {
   // Extraemos los search params y el pathname para controlar los filtros y la navegación
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  // Obtenemos el mes y año actuales para inicializar los filtros
-  const now = new Date();
-  const currentMonth = now.getMonth() + 1;
-  const currentYear = now.getFullYear();
-
   // Obtenemos el mes y año de los parámetros de búsqueda, o usamos los actuales si no están presentes
-  const month = Number(searchParams.get("month")) || currentMonth;
-  const year = Number(searchParams.get("year")) || currentYear;
+  const month = Number(searchParams.get("month")) || initialMonth;
+  const year = Number(searchParams.get("year")) || initialYear;
 
   const handleFilterChange = (newFilters: { month: number; year: number }) => {
     const params = new URLSearchParams(searchParams.toString());
