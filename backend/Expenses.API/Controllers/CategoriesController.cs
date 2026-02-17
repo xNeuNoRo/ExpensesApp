@@ -79,8 +79,12 @@ public class CategoriesController : BaseApiController
         [FromQuery, Required(ErrorMessage = "El nombre es obligatorio.")] string name
     )
     {
-        var category = await _categoryService.GetCategoryByNameAsync(name);
-        return Success(category);
+        // Delegamos al servicio la logica de buscar categorias por su nombre
+        // El resultado es una lista de categorias que coinciden con el nombre dado
+        var categories = await _categoryService.SearchCategoriesByNameAsync(name);
+
+        // Devolvemos la lista de categorias
+        return Success(categories);
     }
 
     // Este endpoint es para obtener un lookup de categorias, que incluye solo el ID y el nombre de cada categoria,

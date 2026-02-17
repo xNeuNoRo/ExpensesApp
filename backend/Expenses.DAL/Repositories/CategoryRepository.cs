@@ -19,8 +19,13 @@ public class CategoryRepository : JsonBaseRepo<Category>, ICategoryRepository
     public async Task<Category?> GetByIdAsync(Guid id) => await FindAsync(c => c.Id == id);
 
     // Obtener una categoria por su nombre
-    public async Task<Category?> GetByNameAsync(string name) =>
-        await FindAsync(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+    public async Task<IEnumerable<Category>> SearchByNameAsync(string name)
+    {
+        var items = await LoadAsync(); // Cargamos todas las categorías
+
+        // Filtramos aquellas que contengan la cadena buscada (ignorando mayúsculas/minúsculas)
+        return items.Where(c => c.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+    }
 
     // Agregar una nueva categoria
     public async Task AddAsync(Category category) => await AppendAsync(category);

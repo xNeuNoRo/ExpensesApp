@@ -56,26 +56,22 @@ public class CategoryService : ICategoryService
     }
 
     // Metodo adicional para obtener una categoria por su nombre
-    public async Task<CategoryResponseDto> GetCategoryByNameAsync(string name)
+    public async Task<IEnumerable<CategoryResponseDto>> SearchCategoriesByNameAsync(string name)
     {
+        // Limpiamos el nombre de espacios en blanco al inicio y al final
         var cleanedName = name.Trim();
 
+        // Validamos que el nombre no este vacio despues de limpiarlo
         if (string.IsNullOrEmpty(cleanedName))
         {
             throw AppException.BadRequest("El nombre de la categoría no puede estar vacío.");
         }
 
-        // Obtenemos la categoria por su nombre de la base de datos (JSON)
-        var category = await _categoryRepository.GetByNameAsync(cleanedName);
+        // Obtenemos las categorias que coincidan con el nombre dado de la base de datos (JSON)
+        var categories = await _categoryRepository.SearchByNameAsync(cleanedName);
 
-        // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
-        if (category == null)
-        {
-            throw AppException.NotFound(_categoryNotFoundMessage, ErrorCodes.CategoryNotFound);
-        }
-
-        // Convertimos la categoria a DTO utilizando el metodo de extension ToDto() definido en CategoryMappingExtensions
-        return category.ToDto();
+        // Convertimos la lista de entidades a una lista de DTOs
+        return categories.ToDtoList();
     }
 
     // Metodo para crear una nueva categoria, con sus respectivas validaciones, y devolver la categoria creada como DTO al cliente
