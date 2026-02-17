@@ -74,13 +74,13 @@ export default function ReportSummary({
             {isOverBudget ? "Excedido" : "Bajo Control"}
           </p>
         </div>
-        <div className="w-16 h-16 shrink-0">
+        <div className="w-18 h-18 shrink-0">
           <CircularProgressbar
             value={displayPercentage}
             text={`${Math.round(budgetPercentage)}%`}
             styles={buildStyles({
               pathColor: isOverBudget ? "var(--danger)" : "var(--primary)",
-              textColor: "var(--main)",
+              textColor: "var(--text-main)",
               trailColor: "var(--border)",
               textSize: "24px",
             })}
