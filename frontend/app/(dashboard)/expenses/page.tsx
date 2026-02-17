@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useExpenses } from "@/hooks/expenses/useQueries";
 import { ExpenseFilter } from "@/schemas/expense";
 import ExpenseFilters from "@/components/expenses/ExpenseFilters";
@@ -10,14 +9,49 @@ import Link from "next/link";
 import CreateExpenseModal from "@/components/expenses/modals/CreateExpenseModal";
 import EditExpenseModal from "@/components/expenses/modals/EditExpenseModal";
 import DeleteExpenseModal from "@/components/expenses/modals/DeleteExpenseModal";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 export default function ExpensesPage() {
-  // Estado inicial de filtros
-  const [filters, setFilters] = useState<ExpenseFilter>({
-    categoryId: null,
-    startDate: null,
-    endDate: null,
-  });
+  // Extraemos los search params y el pathname para controlar los filtros y la navegación
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Construimos el objeto de filtros a partir de los parámetros de búsqueda
+  const filters: ExpenseFilter = {
+    categoryId: searchParams.get("categoryId") || null,
+    startDate: searchParams.get("startDate") || null,
+    endDate: searchParams.get("endDate") || null,
+  };
+
+  // Función para manejar los cambios en los filtros, que actualiza los parámetros de búsqueda en la URL
+  const handleFilterChange = (newFilters: ExpenseFilter) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    // Actualizamos o eliminamos categoryId
+    if (newFilters.categoryId) {
+      params.set("categoryId", newFilters.categoryId);
+    } else {
+      params.delete("categoryId");
+    }
+
+    // Actualizamos o eliminamos startDate
+    if (newFilters.startDate) {
+      params.set("startDate", newFilters.startDate);
+    } else {
+      params.delete("startDate");
+    }
+
+    // Actualizamos o eliminamos endDate
+    if (newFilters.endDate) {
+      params.set("endDate", newFilters.endDate);
+    } else {
+      params.delete("endDate");
+    }
+
+    // Reemplazamos la URL actual sin recargar la página y sin hacer scroll al top
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   // Hook que consulta a la API con los filtros activos
   // React Query re-ejecutará la búsqueda automáticamente cuando 'filters' cambie
@@ -47,7 +81,7 @@ export default function ExpensesPage() {
       </div>
 
       {/* Panel de Filtros */}
-      <ExpenseFilters filters={filters} onFilterChange={setFilters} />
+      <ExpenseFilters filters={filters} onFilterChange={handleFilterChange} />
 
       {/* Tabla de Resultados */}
       <ExpenseListTable expenses={expenses} isLoading={isLoading} />
