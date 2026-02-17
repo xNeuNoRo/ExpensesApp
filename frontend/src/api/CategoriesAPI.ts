@@ -94,7 +94,9 @@ export async function getCategoryByName(
 ): Promise<Category> {
   try {
     // Hacemos la petición a la API para obtener los detalles de la categoría con el nombre proporcionado
-    const { data } = await api.get(`/categories/name/${name}`);
+    const { data } = await api.get("/categories/search", {
+      params: { name },
+    });
     // Validamos la respuesta de la API usando el esquema de categoría
     return validateApiRes(data, CategorySchema);
   } catch (err) {
