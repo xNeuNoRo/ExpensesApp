@@ -14,7 +14,7 @@ export default function DashboardRecentExpenses() {
   return (
     <div className="rounded-xl border border-border bg-background shadow-sm">
       <div className="border-b border-border p-6">
-        <h3 className="font-semibold text-main">Últimos Movimientos</h3>
+        <h3 className="font-semibold text-main">Últimos Movimientos (5)</h3>
       </div>
 
       <div className="relative overflow-x-auto">

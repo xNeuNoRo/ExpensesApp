@@ -23,26 +23,6 @@ public class ExpenseFilter : IValidatableObject // Implementamos la interfaz IVa
             );
         }
 
-        // Validamos que la fecha de inicio no sea una fecha futura,
-        // ya que no tendría sentido filtrar por una fecha que aún no ha ocurrido
-        if (StartDate.HasValue && StartDate > DateTime.UtcNow)
-        {
-            yield return new ValidationResult(
-                "La fecha de inicio no puede ser una fecha futura.",
-                [nameof(StartDate)] // Indica que el error está en el campo 'StartDate'
-            );
-        }
-
-        // Validamos que la fecha de fin no sea una fecha futura,
-        // ya que no tendría sentido filtrar por una fecha que aún no ha ocurrido
-        if (EndDate.HasValue && EndDate > DateTime.UtcNow)
-        {
-            yield return new ValidationResult(
-                "La fecha de fin no puede ser una fecha futura.",
-                [nameof(EndDate)] // Indica que el error está en el campo 'EndDate'
-            );
-        }
-
         // Validamos que la fecha de inicio no sea una fecha muy antigua, por ejemplo anterior al año 1900,
         // ya que no tendría sentido filtrar por una fecha tan antigua y podría indicar un error
         if (StartDate.HasValue && StartDate.Value.Year < 1970)
