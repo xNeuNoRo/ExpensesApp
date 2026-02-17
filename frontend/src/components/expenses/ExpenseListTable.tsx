@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { IoPencil, IoTrash, IoShapes } from "react-icons/io5";
 import SortableHeader from "../shared/SortableHeader";
+import StatsBar from "../shared/StatsBar";
+import { useExpenseStats } from "@/hooks/shared/useExpenseStats";
 
 type ExpenseListTableProps = {
   expenses?: Expense[];
@@ -25,6 +27,8 @@ export default function ExpenseListTable({
     if (!expenses) return [];
     return sortExpenses(expenses, sortConfig.field, sortConfig.direction);
   }, [expenses, sortConfig]);
+
+  const statItems = useExpenseStats(sortedExpenses);
 
   if (isLoading)
     return <div className="h-96 animate-pulse rounded-xl bg-surface" />;
@@ -63,91 +67,98 @@ export default function ExpenseListTable({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-background shadow-sm overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-surface text-xs uppercase text-muted border-b border-border">
-            <tr>
-              <th className="px-6 py-4 font-semibold">Gasto</th>
-              <th className="px-6 py-4 font-semibold">Categoría</th>
-              <SortableHeader
-                field="date"
-                label="Fecha"
-                currentSort={sortConfig}
-                onSort={setSortConfig}
-              />
-              <SortableHeader
-                field="amount"
-                label="Monto"
-                align="right"
-                currentSort={sortConfig}
-                onSort={setSortConfig}
-              />
-              <th className="px-6 py-4 font-semibold text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {sortedExpenses.map((expense) => {
-              const categoryColor = expense.categoryColor;
-              const bgColor = safeHex(categoryColor, "20");
-              const borderColor = safeHex(categoryColor, "40");
+    <div className="space-y-4">
+      <StatsBar items={statItems} />
+      <div className="rounded-xl border border-border bg-background shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-surface text-xs uppercase text-muted border-b border-border">
+              <tr>
+                <th className="px-6 py-4 font-semibold">Gasto</th>
+                <th className="px-6 py-4 font-semibold">Categoría</th>
+                <SortableHeader
+                  field="date"
+                  label="Fecha"
+                  currentSort={sortConfig}
+                  onSort={setSortConfig}
+                />
+                <SortableHeader
+                  field="amount"
+                  label="Monto"
+                  align="right"
+                  currentSort={sortConfig}
+                  onSort={setSortConfig}
+                />
+                <th className="px-6 py-4 font-semibold text-center">
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {sortedExpenses.map((expense) => {
+                const categoryColor = expense.categoryColor;
+                const bgColor = safeHex(categoryColor, "20");
+                const borderColor = safeHex(categoryColor, "40");
 
-              return (
-                <tr
-                  key={expense.id}
-                  className="hover:bg-surface/50 transition-colors"
-                >
-                  <td className="px-6 py-4">
-                    <div className="font-medium text-main">{expense.name}</div>
-                    <div className="text-xs text-muted truncate max-w-50">
-                      {expense.description}
-                    </div>
-                  </td>
+                return (
+                  <tr
+                    key={expense.id}
+                    className="hover:bg-surface/50 transition-colors"
+                  >
+                    <td className="px-6 py-4">
+                      <div className="font-medium text-main">
+                        {expense.name}
+                      </div>
+                      <div className="text-xs text-muted truncate max-w-50">
+                        {expense.description}
+                      </div>
+                    </td>
 
-                  <td className="px-6 py-4">
-                    <span
-                      className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
-                      style={{
-                        backgroundColor: bgColor ?? "var(--surface)",
-                        color: categoryColor ?? "inherit",
-                        borderColor: borderColor ?? "var(--border)",
-                      }}
-                    >
-                      {expense.categoryName || "General"}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 text-muted">
-                    {formatDate(expense.date)}
-                  </td>
-
-                  <td className="px-6 py-4 text-right font-bold text-main">
-                    {formatCurrency(expense.amount)}
-                  </td>
-
-                  <td className="px-6 py-4 text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Link
-                        href={`/expenses?action=edit-expense&expenseId=${expense.id}`}
-                        scroll={false}
-                        className="rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-primary"
+                    <td className="px-6 py-4">
+                      <span
+                        className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                        style={{
+                          backgroundColor: bgColor ?? "var(--surface)",
+                          color: categoryColor ?? "inherit",
+                          borderColor: borderColor ?? "var(--border)",
+                        }}
                       >
-                        <IoPencil className="h-5 w-5" />
-                      </Link>
-                      <Link
-                        href={`/expenses?action=delete-expense&expenseId=${expense.id}`}
-                        scroll={false}
-                        className="rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-danger"
-                      >
-                        <IoTrash className="h-5 w-5" />
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                        {expense.categoryName || "General"}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4 text-muted">
+                      {formatDate(expense.date)}
+                    </td>
+
+                    <td className="px-6 py-4 text-right font-bold text-main">
+                      {formatCurrency(expense.amount)}
+                    </td>
+
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <Link
+                          href={`/expenses?action=edit-expense&expenseId=${expense.id}`}
+                          scroll={false}
+                          className="rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-primary"
+                        >
+                          <IoPencil className="h-5 w-5" />
+                        </Link>
+                        <Link
+                          href={`/expenses?action=delete-expense&expenseId=${expense.id}`}
+                          scroll={false}
+                          className="rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-danger"
+                        >
+                          <IoTrash className="h-5 w-5" />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
