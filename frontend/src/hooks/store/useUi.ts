@@ -4,13 +4,27 @@ import { useAppStore } from "@/stores/useAppStore";
 // Evita tener que importar el store y el slice cada vez
 export function useUi() {
   const {
-    ui: { isSidebarOpen, toggleSidebar, closeSidebar, openSidebar },
+    ui: {
+      isSidebarOpen,
+      toggleSidebar,
+      closeSidebar,
+      openSidebar,
+      isIconPickerOpen,
+      toggleIconPicker,
+      closeIconPicker,
+    },
   } = useAppStore();
 
   return {
+    // Sidebar
     isSidebarOpen,
     toggleSidebar,
     closeSidebar,
     openSidebar,
+
+    // Icon picker
+    isIconPickerOpen,
+    toggleIconPicker,
+    closeIconPicker,
   };
 }

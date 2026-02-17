@@ -9,6 +9,7 @@ export const ExpenseSchema = z.object({
   date: z.string(), // ISO String de la fecha del gasto que viene del backend
   categoryId: z.uuid(),
   categoryName: z.string().optional(),
+  categoryColor: z.string().optional(),
 });
 
 // Esquema para un array de gastos

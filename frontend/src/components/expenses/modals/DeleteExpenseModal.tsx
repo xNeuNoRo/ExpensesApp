@@ -68,14 +68,14 @@ export default function DeleteExpenseModal() {
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
               <button
                 onClick={closeModal}
-                className="rounded-lg px-4 py-2 text-sm font-semibold text-main hover:bg-surface transition-colors"
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-main hover:bg-surface hover:cursor-pointer transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeletingExpense}
-                className="rounded-lg bg-danger px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-danger/90 transition-all disabled:opacity-50"
+                className="rounded-lg bg-danger px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-danger/90 hover:cursor-pointer transition-all disabled:opacity-50"
               >
                 {isDeletingExpense ? "Eliminando..." : "Sí, eliminar gasto"}
               </button>

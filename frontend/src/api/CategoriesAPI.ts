@@ -13,7 +13,7 @@ import {
 } from "@/schemas/category";
 
 export type CategoriesAPIType = {
-  UpdateCategoryFormData: UpdateCategoryFormData & { id: Category["id"] };
+  UpdateCategoryFormData: UpdateCategoryFormData;
 };
 
 /**
@@ -142,7 +142,9 @@ export async function validateCategoryName(
 ): Promise<boolean> {
   try {
     // Hacemos la petición a la API para validar si el nombre de categoría está disponible
-    const { data } = await api.get(`/categories/validate-name/${name}`);
+    const { data } = await api.get("/categories/validate-name", {
+      params: { name },
+    });
     // Validamos la respuesta de la API usando el esquema de validación de nombre de categoría
     const validationResult = validateApiRes(data, ValidateCategorySchema);
     // Si la validación es exitosa, retornamos el resultado de la validación

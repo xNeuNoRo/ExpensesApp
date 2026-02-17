@@ -11,6 +11,8 @@ export default function CreateExpenseModal() {
   const searchParams = useSearchParams();
   // Extraemos el valor de la accion de la url
   const action = searchParams.get("action");
+  // El modal de creación de gasto solo se muestra si la acción en los parámetros de búsqueda es "create-expense"
+  const isOpen = action === "create-expense";
 
   // Usamos el hook de mutación para crear un nuevo gasto
   const { mutate: createExpense, isPending: isCreatingExpense } =
@@ -22,24 +24,17 @@ export default function CreateExpenseModal() {
   };
 
   return (
-    <>
-      {/* Modal de Creación */}
-      <Modal
-        title="Registrar Nuevo Gasto"
-        open={action === "create-expense"}
-        close={closeModal}
-      >
-        <ExpenseForm
-          onSubmit={(data) => {
-            createExpense(data, {
-              onSuccess: () => {
-                closeModal();
-              },
-            });
-          }}
-          isLoading={isCreatingExpense}
-        />
-      </Modal>
-    </>
+    <Modal title="Registrar Nuevo Gasto" open={isOpen} close={closeModal}>
+      <ExpenseForm
+        onSubmit={(data) => {
+          createExpense(data, {
+            onSuccess: () => {
+              closeModal();
+            },
+          });
+        }}
+        isLoading={isCreatingExpense}
+      />
+    </Modal>
   );
 }

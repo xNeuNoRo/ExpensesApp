@@ -30,8 +30,8 @@ export const CreateCategorySchema = z.object({
   monthlyBudget: z
     .number()
     .positive("El presupuesto debe ser un valor positivo."),
-  iconKey: z.string().optional(),
-  color: z.string().optional(),
+  iconKey: z.string().nullable(),
+  color: z.string().nullable(),
 });
 
 // Esquema para actualizar una categoría de gastos (es lo mismo que el de creacion)

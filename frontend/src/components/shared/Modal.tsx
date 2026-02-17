@@ -60,7 +60,7 @@ export default function Modal({
               leaveTo="opacity-0 scale-50"
             >
               <DialogPanel
-                className={`w-full ${sizeClasses[size]} transform overflow-hidden rounded-2xl bg-background p-8 text-left align-middle shadow-xl transition-all border border-border`}
+                className={`w-full ${sizeClasses[size]} transform rounded-2xl bg-background p-8 text-left align-middle shadow-xl transition-all border border-border`}
               >
                 {/* Header superior: Botón de cerrar integrado */}
                 <div className="flex items-start justify-between">

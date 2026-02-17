@@ -61,8 +61,19 @@ export default function DashboardRecentExpenses() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
-                        {expense.categoryName || "General"}
+                      <span
+                        className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 text-xs font-medium shadow-sm"
+                        style={{
+                          backgroundColor: expense.categoryColor
+                            ? `${expense.categoryColor}20` // Añadimos 20% de opacidad al hex
+                            : "var(--surface)", // Fallback
+                          color: expense.categoryColor || "inherit", // Color del texto
+                          borderColor: expense.categoryColor
+                            ? `${expense.categoryColor}40` // Versión más opaca para el borde
+                            : "var(--border)", // Fallback
+                        }}
+                      >
+                        {expense.categoryName || "Sin Categoría"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-muted">
@@ -72,22 +83,24 @@ export default function DashboardRecentExpenses() {
                       {formatCurrency(expense.amount)}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <Link
-                        href={`/?action=edit-expense&expenseId=${expense.id}`}
-                        scroll={false}
-                        className="inline-flex items-center justify-center rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-primary"
-                        title="Editar gasto"
-                      >
-                        <IoPencil className="h-5 w-5" />
-                      </Link>
-                      <Link
-                        href={`/?action=delete-expense&expenseId=${expense.id}`}
-                        scroll={false}
-                        className="p-2 text-muted hover:text-danger transition-colors"
-                        title="Eliminar"
-                      >
-                        <IoTrash className="h-5 w-5" />
-                      </Link>
+                      <div className="flex items-center justify-center gap-2">
+                        <Link
+                          href={`/?action=edit-expense&expenseId=${expense.id}`}
+                          scroll={false}
+                          className="inline-flex items-center justify-center rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-primary"
+                          title="Editar gasto"
+                        >
+                          <IoPencil className="h-5 w-5" />
+                        </Link>
+                        <Link
+                          href={`/?action=delete-expense&expenseId=${expense.id}`}
+                          scroll={false}
+                          className="p-2 text-muted hover:text-danger transition-colors"
+                          title="Eliminar"
+                        >
+                          <IoTrash className="h-5 w-5" />
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ),

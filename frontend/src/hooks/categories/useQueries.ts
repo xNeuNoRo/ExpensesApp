@@ -2,6 +2,7 @@ import {
   getCategories,
   getCategoryById,
   lookupCategories,
+  validateCategoryName,
 } from "@/api/CategoriesAPI";
 import { categoryKeys } from "@/lib/queryKeys";
 import { Category } from "@/schemas/category";
@@ -30,5 +31,17 @@ export function useCategory(id: Category["id"]) {
     queryKey: categoryKeys.detail(id),
     queryFn: () => getCategoryById(id),
     enabled: !!id, // Solo habilitar la consulta si el ID es válido (no nulo o indefinido)
+  });
+}
+
+// Hook para validar si un nombre de categoría está disponible
+export function useValidateCategoryName(name: Category["name"]) {
+  return useQuery({
+    queryKey: categoryKeys.validate(name),
+    queryFn: () => validateCategoryName(name),
+    // Solo se ejecuta si el nombre tiene al menos 3 caracteres
+    enabled: !!name && name.trim().length >= 3,
+    retry: false,
+    staleTime: 0, // Siempre valida fresco
   });
 }
