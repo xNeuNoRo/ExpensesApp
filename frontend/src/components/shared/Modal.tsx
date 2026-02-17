@@ -7,7 +7,7 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { IoClose } from "react-icons/io5";
 
 type ModalProps = {
@@ -33,6 +33,19 @@ export default function Modal({
   close,
   children,
 }: Readonly<ModalProps>) {
+  // Usamos un estado local para controlar el montaje del componente y evitar problemas con el SSR
+  const [mounted, setMounted] = useState(false);
+
+  // Usamos useEffect para marcar el componente
+  // como montado después del primer renderizado, lo que permite que el Modal funcione correctamente con SSR
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // Si el componente no está montado, no renderizamos nada para evitar problemas con el SSR
+  if (!mounted) return null;
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={close}>
