@@ -1,14 +1,17 @@
 "use client";
 
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Modal from "@/components/shared/Modal";
 import { useExpense, useDeleteExpense } from "@/hooks/expenses";
 import { IoWarning } from "react-icons/io5";
+import { useQueryString } from "@/hooks/shared/useQueryString";
 
 export default function DeleteExpenseModal() {
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+    const { createUrl } = useQueryString();
+
   // Extraemos el router y los search params para controlar la apertura del modal
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   // Extraemos el valor de la accion de la url y el id del gasto a modificar
   const action = searchParams.get("action");
@@ -34,7 +37,11 @@ export default function DeleteExpenseModal() {
 
   // Función para cerrar el modal, que simplemente elimina los parámetros de la URL para cerrar el modal
   const closeModal = () => {
-    router.replace(pathname, { scroll: false });
+    const newUrl = createUrl({
+      action: null,
+      expenseId: null,
+    });
+    router.replace(newUrl, { scroll: false });
   };
 
   // Usamos el hook de consulta para obtener los datos del gasto a editar

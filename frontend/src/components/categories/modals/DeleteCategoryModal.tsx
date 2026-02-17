@@ -4,8 +4,12 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Modal from "@/components/shared/Modal";
 import { useCategory, useDeleteCategory } from "@/hooks/categories";
 import { IoWarning } from "react-icons/io5";
+import { useQueryString } from "@/hooks/shared/useQueryString";
 
 export default function DeleteCategoryModal() {
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+  const { createUrl } = useQueryString();
+
   // Extraemos el router y los search params para controlar la apertura del modal
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -27,8 +31,14 @@ export default function DeleteCategoryModal() {
     isOpen ? categoryId || "" : "",
   );
 
-  // Función para cerrar el modal, que simplemente navega a la página de categorías sin parámetros
-  const closeModal = () => router.push("/categories", { scroll: false });
+  // Función para cerrar el modal, que simplemente elimina los parámetros de la URL para cerrar el modal
+  const closeModal = () => {
+    const newUrl = createUrl({
+      action: null,
+      categoryId: null,
+    });
+    router.replace(newUrl, { scroll: false });
+  };
 
   // Función para manejar la eliminación de la categoría, que llama a la mutación de eliminación
   const handleDelete = () => {

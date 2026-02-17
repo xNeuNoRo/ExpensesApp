@@ -13,6 +13,7 @@ import SortableHeader from "../shared/SortableHeader";
 import StatsBar from "../shared/StatsBar";
 import { useExpenseStats } from "@/hooks/shared/useExpenseStats";
 import { CATEGORY_ICONS } from "@/lib/category-icons";
+import { useQueryString } from "@/hooks/shared/useQueryString";
 
 type ExpenseListTableProps = {
   expenses?: Expense[];
@@ -24,6 +25,9 @@ export default function ExpenseListTable({
   isLoading,
 }: Readonly<ExpenseListTableProps>) {
   const { sortConfig, setSortConfig } = useAppStore((state) => state.expenses);
+
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+  const { createUrl } = useQueryString();
 
   // Referencia para el contenedor de la tabla, necesaria para la virtualización
   const parentRef = useRef<HTMLDivElement>(null);
@@ -175,14 +179,20 @@ export default function ExpenseListTable({
                     <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <Link
-                          href={`/expenses?action=edit-expense&expenseId=${expense.id}`}
+                          href={createUrl({
+                            action: "edit-expense",
+                            expenseId: expense.id,
+                          })}
                           scroll={false}
                           className="rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-primary"
                         >
                           <IoPencil className="h-5 w-5" />
                         </Link>
                         <Link
-                          href={`/expenses?action=delete-expense&expenseId=${expense.id}`}
+                          href={createUrl({
+                            action: "delete-expense",
+                            expenseId: expense.id,
+                          })}
                           scroll={false}
                           className="rounded-lg p-2 text-muted transition-colors hover:bg-surface hover:text-danger"
                         >

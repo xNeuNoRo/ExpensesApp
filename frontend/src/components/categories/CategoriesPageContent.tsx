@@ -5,14 +5,21 @@ import { IoAddCircle, IoSearch, IoClose } from "react-icons/io5";
 import { useState, useEffect, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebounce } from "@/hooks/shared/useDebounce";
-import { useCategories, useSearchCategoriesByName } from "@/hooks/categories/useQueries";
+import {
+  useCategories,
+  useSearchCategoriesByName,
+} from "@/hooks/categories/useQueries";
 import CreateCategoryModal from "@/components/categories/modals/CreateCategoryModal";
 import EditCategoryModal from "@/components/categories/modals/EditCategoryModal";
 import DeleteCategoryModal from "@/components/categories/modals/DeleteCategoryModal";
 import CategoryListTable from "./CategoryListTable";
+import { useQueryString } from "@/hooks/shared/useQueryString";
 
 export default function CategoriesPageContent() {
-    // Hooks de navegación y estado para el input de búsqueda
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+  const { createUrl } = useQueryString();
+
+  // Hooks de navegación y estado para el input de búsqueda
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -29,13 +36,14 @@ export default function CategoriesPageContent() {
     // Comparamos el valor actual del parámetro de búsqueda con el valor que queremos establecer basado en el input debounced
     const currentURL = searchParams.get("q") || "";
     // Solo actualizamos la URL si el valor debounced es diferente al valor actual en la URL para evitar navegaciones innecesarias
-    const intendedURL = debouncedInput.trim().length >= 3 ? debouncedInput.trim() : "";
+    const intendedURL =
+      debouncedInput.trim().length >= 3 ? debouncedInput.trim() : "";
 
     // Si el valor que queremos establecer es diferente al actual, actualizamos la URL con el nuevo parámetro de búsqueda
     if (intendedURL !== currentURL) {
-        // Creamos una nueva instancia de URLSearchParams basada en los searchParams actuales para modificarla
+      // Creamos una nueva instancia de URLSearchParams basada en los searchParams actuales para modificarla
       const params = new URLSearchParams(searchParams.toString());
-      // Si el valor intendedURL es válido (al menos 3 caracteres), 
+      // Si el valor intendedURL es válido (al menos 3 caracteres),
       // lo establecemos en el parámetro "q", de lo contrario lo eliminamos de la URL
       if (intendedURL) params.set("q", intendedURL);
       // Si intendedURL es vacío, eliminamos el parámetro "q" de la URL para limpiar la búsqueda
@@ -45,13 +53,13 @@ export default function CategoriesPageContent() {
     }
   }, [debouncedInput, pathname, router, searchParams]);
 
-  // Efecto para sincronizar el valor del input con el parámetro de búsqueda en la URL 
+  // Efecto para sincronizar el valor del input con el parámetro de búsqueda en la URL
   // cuando este último cambie por otras vías (ej. navegación manual, botones de adelante/atrás)
   useEffect(() => {
     // Obtenemos el valor actual del parámetro de búsqueda "q" de la URL
     const urlValue = searchParams.get("q") || "";
 
-    // Solo actualizamos el estado del input si el valor en la URL 
+    // Solo actualizamos el estado del input si el valor en la URL
     // es diferente al valor actual del input para evitar bucles infinitos
     if (urlValue !== inputValue && urlValue !== debouncedInput) {
       const id = setTimeout(() => {
@@ -59,12 +67,13 @@ export default function CategoriesPageContent() {
       }, 0);
       return () => clearTimeout(id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // Hooks para obtener las categorías y los resultados de búsqueda basados en el queryParam
   const { data: allCategories, isLoading: isLoadingAll } = useCategories();
-  const { data: searchResults, isFetching: isSearching } = useSearchCategoriesByName(queryParam);
+  const { data: searchResults, isFetching: isSearching } =
+    useSearchCategoriesByName(queryParam);
 
   // Memoización de la lista de categorías a mostrar en la tabla, que depende del queryParam y los resultados obtenidos
   const categories = useMemo(() => {
@@ -88,7 +97,7 @@ export default function CategoriesPageContent() {
         </div>
 
         <Link
-          href="/categories?action=create-category"
+          href={createUrl({ action: "create-category" })}
           scroll={false}
           className="flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-primary/90 shadow-sm active:scale-95"
         >
@@ -130,9 +139,9 @@ export default function CategoriesPageContent() {
       </div>
 
       {/* Tabla De Categorias */}
-      <CategoryListTable 
-        categories={categories} 
-        isLoading={isLoadingAll && !queryParam} 
+      <CategoryListTable
+        categories={categories}
+        isLoading={isLoadingAll && !queryParam}
       />
 
       <CreateCategoryModal />

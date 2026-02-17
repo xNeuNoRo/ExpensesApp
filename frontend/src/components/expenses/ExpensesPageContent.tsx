@@ -10,8 +10,12 @@ import CreateExpenseModal from "@/components/expenses/modals/CreateExpenseModal"
 import EditExpenseModal from "@/components/expenses/modals/EditExpenseModal";
 import DeleteExpenseModal from "@/components/expenses/modals/DeleteExpenseModal";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useQueryString } from "@/hooks/shared/useQueryString";
 
 export default function ExpensesPageContent() {
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+  const { createUrl } = useQueryString();
+
   // Extraemos los search params y el pathname para controlar los filtros y la navegación
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -71,7 +75,7 @@ export default function ExpensesPageContent() {
         </div>
 
         <Link
-          href="/expenses?action=create-expense"
+          href={createUrl({ action: "create-expense" })} // Enlace para abrir el modal de creación de gasto
           scroll={false}
           className="flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-primary/90 shadow-sm active:scale-95"
         >

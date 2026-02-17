@@ -1,11 +1,15 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Modal from "@/components/shared/Modal";
 import CategoryForm from "../CategoryForm";
 import { useCreateCategory } from "@/hooks/categories";
+import { useQueryString } from "@/hooks/shared/useQueryString";
 
 export default function CreateCategoryModal() {
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+  const { createUrl } = useQueryString();
+
   // Extraemos el router y los search params para controlar la apertura del modal
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,8 +22,13 @@ export default function CreateCategoryModal() {
   const { mutate: createCategory, isPending: isCreatingCategory } =
     useCreateCategory();
 
-  // Función para cerrar el modal, que simplemente navega a la página de categorías sin parámetros
-  const closeModal = () => router.push("/categories", { scroll: false });
+  // Función para cerrar el modal, que simplemente elimina los parámetros de la URL para cerrar el modal
+  const closeModal = () => {
+    const newUrl = createUrl({
+      action: null,
+    });
+    router.replace(newUrl, { scroll: false });
+  };
 
   return (
     <Modal title="Nueva Categoría" open={isOpen} close={closeModal}>

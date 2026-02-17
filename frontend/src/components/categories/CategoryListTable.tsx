@@ -7,6 +7,7 @@ import { IoCreate, IoShapes, IoTrash } from "react-icons/io5";
 import { formatCurrency } from "@/helpers/formatters";
 import { CATEGORY_ICONS } from "@/lib/category-icons";
 import { Category } from "@/schemas/category"; // Asegúrate de importar tu tipo
+import { useQueryString } from "@/hooks/shared/useQueryString";
 
 interface CategoryListTableProps {
   categories: Category[];
@@ -17,6 +18,9 @@ export default function CategoryListTable({
   categories,
   isLoading,
 }: Readonly<CategoryListTableProps>) {
+  // Hook personalizado para manejar la generación de URLs con query strings en Next.js
+  const { createUrl } = useQueryString();
+
   // Configuración de virtualización para la tabla de categorías
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +73,7 @@ export default function CategoryListTable({
           <tbody className="divide-y divide-border bg-background">
             {categories && categories.length > 0 ? (
               <>
-              {/* Espaciador Superior */}
+                {/* Espaciador Superior */}
                 {paddingTop > 0 && (
                   <tr>
                     <td style={{ height: `${paddingTop}px` }} colSpan={4} />
@@ -111,7 +115,10 @@ export default function CategoryListTable({
                       <td className="px-6 py-3 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <Link
-                            href={`/categories?action=edit-category&categoryId=${cat.id}`}
+                            href={createUrl({
+                              action: "edit-category",
+                              categoryId: cat.id,
+                            })}
                             scroll={false}
                             className="rounded-lg p-2 text-muted hover:bg-surface hover:text-primary transition-colors"
                             title="Editar categoría"
@@ -119,7 +126,10 @@ export default function CategoryListTable({
                             <IoCreate className="h-5 w-5" />
                           </Link>
                           <Link
-                            href={`/categories?action=delete-category&categoryId=${cat.id}`}
+                            href={createUrl({
+                              action: "delete-category",
+                              categoryId: cat.id,
+                            })}
                             scroll={false}
                             className="rounded-lg p-2 text-muted hover:bg-surface hover:text-danger transition-colors"
                             title="Eliminar categoría"
