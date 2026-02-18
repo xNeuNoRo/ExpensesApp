@@ -81,6 +81,15 @@ public class ExpenseService : IExpenseService
         // Validamos que la categoria especificada exista antes de crear el gasto
         var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
+        // Validamos que el monto del gasto sea positivo
+        if (request.Amount <= 0)
+        {
+            throw AppException.BadRequest(
+                "El monto del gasto debe ser positivo.",
+                ErrorCodes.ValidationError
+            );
+        }
+
         // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
         if (category == null)
         {
@@ -112,6 +121,15 @@ public class ExpenseService : IExpenseService
             throw AppException.NotFound(
                 "No se encontro el gasto especificado.",
                 ErrorCodes.ExpenseNotFound
+            );
+        }
+
+        // Validamos que el monto del gasto sea positivo
+        if (request.Amount <= 0)
+        {
+            throw AppException.BadRequest(
+                "El monto del gasto debe ser positivo.",
+                ErrorCodes.ValidationError
             );
         }
 
@@ -213,7 +231,7 @@ public class ExpenseService : IExpenseService
         var details = allCategories
             .Select(cat =>
             {
-                // Monto gastado en esa categoria, obteniendo el valor del diccionario creado anteriormente, 
+                // Monto gastado en esa categoria, obteniendo el valor del diccionario creado anteriormente,
                 // o 0 si no hay gastos en esa categoria
                 decimal spentAmount = spendingByCategory.ContainsKey(cat.Id)
                     ? spendingByCategory[cat.Id]
