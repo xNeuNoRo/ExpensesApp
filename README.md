@@ -120,5 +120,5 @@ bun run dev
 **¿Dónde se guardan mis datos?**
 Los archivos `gastos.json` y `categorias.json` se generan automáticamente en la carpeta de salida del binario del backend (generalmente `backend/Expenses.API/bin/Debug/net8.0/Data/`).
 
-**La API no responde en el puerto 5038**
+**La API no responde en el puerto 4000**
 Verifica el archivo `launchSettings.json` en el backend o asegúrate de que el puerto no esté ocupado. Si usas `mise`, revisa los logs de la terminal para ver el puerto asignado.

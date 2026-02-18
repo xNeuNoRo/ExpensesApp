@@ -209,25 +209,35 @@ public class ExpenseService : IExpenseService
             .ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
         // Ej: { GuidCategoria1: 150.00, GuidCategoria2: 75.50, ... }
 
-        // Creamos un diccionario de las categorias para buscarla mas en detalle despues
-        var categoryDict = allCategories.ToDictionary(c => c.Id);
-
         // Calculamos las estadisticas por categoria iterando sobre cada categoria:
-        var details = spendingByCategory
-            .Select(item =>
+        var details = allCategories
+            .Select(cat =>
             {
-                // Obtenemos el ID de la categoria y el monto gastado en esa categoria del diccionario de gastos por categoria
-                var categoryId = item.Key;
-                var spentAmount = item.Value;
+                // Monto gastado en esa categoria, obteniendo el valor del diccionario creado anteriormente, 
+                // o 0 si no hay gastos en esa categoria
+                decimal spentAmount = spendingByCategory.ContainsKey(cat.Id)
+                    ? spendingByCategory[cat.Id]
+                    : 0;
 
-                // Intentamos obtener la categoria correspondiente al ID utilizando el diccionario de categorias,
-                // si no se encuentra la categoria, cat sera null
-                categoryDict.TryGetValue(categoryId, out var cat);
+                // Presupuesto de la categoria
+                decimal categoryBudget = cat?.MonthlyBudget ?? 0;
 
-                // Calculamos el porcentaje que representa el monto gastado en esa categoria
-                // respecto al total gastado, evitando division por cero si el total gastado es cero
-                double percentage =
-                    totalSpent > 0 ? (double)spentAmount / (double)totalSpent * 100 : 0;
+                // Porcentaje, inicialmente 0
+                double percentage = 0;
+
+                // Si el presupuesto de la categoria es mayor a 0
+                if (categoryBudget > 0)
+                {
+                    // Calculamos el porcentaje dividiendo el monto gastado en esa categoria entre el presupuesto de esa categoria, y multiplicando por 100 para obtener el porcentaje
+                    percentage = ((double)spentAmount / (double)categoryBudget) * 100;
+                }
+                else if (spentAmount > 0)
+                {
+                    // Si el presupuesto de la categoria es 0 pero se ha gastado dinero en esa categoria,
+                    // consideramos que se ha superado el presupuesto y establecemos el porcentaje en 100
+                    // para reflejar eso en el reporte
+                    percentage = 100;
+                }
 
                 // Creamos un objeto CategoryStatDto con el nombre y color de la categoria, el monto gastado en esa categoria, el presupuesto mensual de esa categoria, el porcentaje calculado y una alerta si el monto gastado en esa categoria supera su presupuesto mensual
                 return new CategoryStatDto(
