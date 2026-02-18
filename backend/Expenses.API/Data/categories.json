@@ -1,0 +1,37 @@
+[
+  {
+    "Id": "b10c4659-ff27-4c71-9c9f-3adbd4b23901",
+    "Name": "Comida",
+    "MonthlyBudget": 15000,
+    "IconKey": "food",
+    "Color": "#f8e45c"
+  },
+  {
+    "Id": "e3e9e436-4735-456d-a2a0-39f1fa3d51c7",
+    "Name": "Transporte",
+    "MonthlyBudget": 5000,
+    "IconKey": "bus",
+    "Color": "#1c71d8"
+  },
+  {
+    "Id": "af87c5d0-fbb0-4a61-8c68-957a7d51f4a9",
+    "Name": "Ocio",
+    "MonthlyBudget": 8000,
+    "IconKey": "bike",
+    "Color": "#c061cb"
+  },
+  {
+    "Id": "0e3a4a07-2eef-49f6-ae9f-796a0201414c",
+    "Name": "Educacion",
+    "MonthlyBudget": 12000,
+    "IconKey": "education",
+    "Color": "#EF4444"
+  },
+  {
+    "Id": "e223afe1-8f44-4370-ab3d-ea4c9b20dcd9",
+    "Name": "Mascota",
+    "MonthlyBudget": 5000,
+    "IconKey": "pets",
+    "Color": "#5d60c3"
+  }
+]

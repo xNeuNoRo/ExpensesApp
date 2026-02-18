@@ -78,9 +78,6 @@ public class ExpenseService : IExpenseService
     // Metodo para crear un nuevo gasto, con sus respectivas validaciones, y devolver el gasto creado como DTO al cliente
     public async Task<ExpenseResponseDto> CreateExpenseAsync(CreateExpenseRequest request)
     {
-        // Validamos que la categoria especificada exista antes de crear el gasto
-        var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
-
         // Validamos que el monto del gasto sea positivo
         if (request.Amount <= 0)
         {
@@ -89,6 +86,9 @@ public class ExpenseService : IExpenseService
                 ErrorCodes.ValidationError
             );
         }
+
+        // Validamos que la categoria especificada exista antes de crear el gasto
+        var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
         // Si la categoria no existe, lanzamos una excepcion personalizada AppException con un mensaje de error y un codigo de error especifico
         if (category == null)
@@ -128,8 +128,8 @@ public class ExpenseService : IExpenseService
         if (request.Amount <= 0)
         {
             throw AppException.BadRequest(
-                "El monto del gasto debe ser positivo.",
-                ErrorCodes.ValidationError
+                "El monto del gasto debe ser mayor que 0.",
+                ErrorCodes.InvalidAmount
             );
         }
 

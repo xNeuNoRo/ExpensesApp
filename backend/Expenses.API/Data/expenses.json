@@ -1,0 +1,90 @@
+[
+  {
+    "Id": "4d58546c-5945-4291-96dc-003da115512c",
+    "Name": "Pica Pollo",
+    "Description": "Cene un pica pollo",
+    "Amount": 500,
+    "Date": "2026-02-10T00:00:00",
+    "CategoryId": "b10c4659-ff27-4c71-9c9f-3adbd4b23901"
+  },
+  {
+    "Id": "d6b381b4-e2e6-4287-893d-7fcacc8646b6",
+    "Name": "Reservas",
+    "Description": "Hice la compra quincenal en el Bravo",
+    "Amount": 4000,
+    "Date": "2026-02-17T00:00:00",
+    "CategoryId": "b10c4659-ff27-4c71-9c9f-3adbd4b23901"
+  },
+  {
+    "Id": "a8e19d6d-d14c-4c93-9f8b-2c964e3b7251",
+    "Name": "Reservas",
+    "Description": "Hice la compra quincenal en el Bravo",
+    "Amount": 6000,
+    "Date": "2026-03-03T00:00:00",
+    "CategoryId": "b10c4659-ff27-4c71-9c9f-3adbd4b23901"
+  },
+  {
+    "Id": "45826b25-3284-4610-928c-23664eb934eb",
+    "Name": "ITLA",
+    "Description": "Transporte semanal del ITLA",
+    "Amount": 150,
+    "Date": "2026-02-17T00:00:00",
+    "CategoryId": "e3e9e436-4735-456d-a2a0-39f1fa3d51c7"
+  },
+  {
+    "Id": "9a176819-c3c9-4943-8510-54a89de6d40c",
+    "Name": "ITLA",
+    "Description": "Transporte semanal al ITLA\n",
+    "Amount": 150,
+    "Date": "2026-02-10T00:00:00",
+    "CategoryId": "e3e9e436-4735-456d-a2a0-39f1fa3d51c7"
+  },
+  {
+    "Id": "c48a2049-9fb2-437c-b9e3-da59e06a5ad9",
+    "Name": "Purina",
+    "Description": "Compre un saco de purina para el perro",
+    "Amount": 1000,
+    "Date": "2026-02-13T00:00:00",
+    "CategoryId": "e223afe1-8f44-4370-ab3d-ea4c9b20dcd9"
+  },
+  {
+    "Id": "8fcc3cd8-5716-4822-90aa-94563008f204",
+    "Name": "Amazon",
+    "Description": "Compras variadas en Amazon",
+    "Amount": 5000,
+    "Date": "2026-02-26T00:00:00",
+    "CategoryId": "af87c5d0-fbb0-4a61-8c68-957a7d51f4a9"
+  },
+  {
+    "Id": "08490dfa-8d35-4ee4-ad8e-278e99c288df",
+    "Name": "Pago ITLA",
+    "Description": "Mensualidad de creditos del ITLA",
+    "Amount": 7000,
+    "Date": "2026-01-28T00:00:00",
+    "CategoryId": "0e3a4a07-2eef-49f6-ae9f-796a0201414c"
+  },
+  {
+    "Id": "2224d86f-84fa-46e1-a854-54189dcad4b8",
+    "Name": "Trabajo",
+    "Description": "Transporte al trabajo",
+    "Amount": 100,
+    "Date": "2026-02-11T00:00:00",
+    "CategoryId": "e3e9e436-4735-456d-a2a0-39f1fa3d51c7"
+  },
+  {
+    "Id": "9ac9c9f8-cdea-417d-9bff-3c5dde7bfe9d",
+    "Name": "Pago ITLA",
+    "Description": "Mensualidad del ITLA\n",
+    "Amount": 4000,
+    "Date": "2026-02-28T00:00:00",
+    "CategoryId": "0e3a4a07-2eef-49f6-ae9f-796a0201414c"
+  },
+  {
+    "Id": "9951d430-fa3e-4812-b9ac-3b07c8ac8278",
+    "Name": "Pago ITLA",
+    "Description": "Mensualidad del ITLA",
+    "Amount": 7000,
+    "Date": "2026-03-18T00:00:00",
+    "CategoryId": "0e3a4a07-2eef-49f6-ae9f-796a0201414c"
+  }
+]

@@ -114,6 +114,16 @@ bun install
 bun run dev
 ```
 
+## 💾 Datos de Prueba (Seed Data)
+
+El repositorio incluye archivos con datos de ejemplo (`gastos.json` y `categorias.json`) ubicados en la raíz de la carpeta `backend/`.
+
+**Para utilizarlos:**
+1. Inicia el backend al menos una vez para que se cree la estructura de carpetas automáticamente.
+2. Copia los archivos `.json` provistos en `backend/`.
+3. Pégalos en la carpeta de persistencia activa (revisa la pregunta *"¿Dónde se guardan mis datos?"* en la sección siguiente) reemplazando los archivos vacíos.
+4. Reinicia el backend para ver los reportes y gastos reflejados en el Dashboard.
+
 
 ## ❓ Solución de Problemas
 
@@ -122,3 +132,6 @@ Los archivos `gastos.json` y `categorias.json` se generan automáticamente en la
 
 **La API no responde en el puerto 4000**
 Verifica el archivo `launchSettings.json` en el backend o asegúrate de que el puerto no esté ocupado. Si usas `mise`, revisa los logs de la terminal para ver el puerto asignado.
+
+**Advertencia en terminal / Frontend Next.js: `[DEP0169] url.parse() behavior is not standardized...`**
+Si ves este mensaje al ejecutar el Frontend, **puedes ignorarlo**. Es una advertencia informativa de Node.js relacionada con dependencias internas y no afecta en absoluto el funcionamiento ni la estabilidad de la aplicación.
